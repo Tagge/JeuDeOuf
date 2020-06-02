@@ -33,6 +33,9 @@ void Player::update(Level * const level)
     if(underCeiling(level)){
         setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
     }
+    if(getIntangible() > 0) {
+        setIntangible((getIntangible()+1)%constants::INTANGIBLE_FRAMES);
+    }
     setAnimPos(0);
     if(level->getKey(0)){
         double x = getVectorX();
@@ -77,24 +80,44 @@ void Player::collide(LivingEntity *e)
 
 void Player::collide(Roomba *r)
 {
-
-    //type collision
-    QRectF roomba = r->getHitbox();
-    QRectF player = getHitbox();
-    if(r->getHealth()>0) {
-        if(player.bottom() < roomba.bottom()) {
-            r->setHealth(r->getHealth()-1);
-            setJumpTime(getJumpTop() * constants::FPS_CALCULATION/2);
-        }
-        else {
-            setHealth(getHealth()-1);
-            setAnimPos(3);
-        }
-    } else {
-        if(player.left() < roomba.left()) {
-            r->setVectorX(0.05*constants::TILE_WIDTH);
-        } else if(player.right() > roomba.right()) {
-            r->setVectorX(-0.05*constants::TILE_WIDTH);
+    if(getIntangible() == 0) {
+        QRectF roomba = r->getHitbox();
+        QRectF player = getHitbox();
+        if(r->getHealth()>0) {
+            if(player.bottom() < roomba.bottom()) {
+                r->setHealth(r->getHealth()-1);
+                setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
+            }
+            else {
+                qDebug() << "touché";
+                setHealth(getHealth()-1);
+                setAnimPos(3);
+                setIntangible(1);
+            }
+        } else {
+            if(r->getIntangible() == 0) {
+                if(r->getVectorX() == 0) {
+                    if(player.bottom() < roomba.bottom()) {
+                        setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
+                    }
+                    if((player.left()+player.right())/2 < (roomba.left()+roomba.right())/2) {
+                        r->setVectorX(0.15*constants::TILE_WIDTH);
+                    } else {
+                        r->setVectorX(-0.15*constants::TILE_WIDTH);
+                    }
+                } else {
+                    if(player.bottom() < roomba.bottom()) {
+                        r->setVectorX(0);
+                        setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
+                    }
+                    else {
+                        qDebug() << "touché";
+                        setHealth(getHealth()-1);
+                        setAnimPos(3);
+                        setIntangible(1);
+                    }
+                }
+            }
         }
     }
 }
@@ -123,5 +146,43 @@ void Player::endTurn()
         setVectorX(0);
     }
     setVectorY(0);
+}
+
+void Player::move(Level * const level, QRect limit)
+{
+    QRectF pos = getHitbox();
+    setPosTmp(pos.left()+(int)getVectorX(), pos.top());
+    if(getPosTmp().left() < limit.left()){
+        setPosTmp(limit.left(), getPosTmp().top());
+    }
+    if(getPosTmp().right() > limit.right()){
+        setPosTmp(limit.right()-getHitbox().width(), getPosTmp().top());
+    }
+    bool collision = detectCollisionMap(level);
+    int modifier = 1;
+    if(getVectorX() > 0){
+        modifier = -1;
+    }
+    while(collision){
+        setPosTmp(getPosTmp().left()+modifier, pos.top());
+        collision = detectCollisionMap(level);
+    }
+    setPosTmp(getPosTmp().left(), pos.top()+(int)getVectorY());
+    if(getPosTmp().top() < limit.top()){
+        setPosTmp(getPosTmp().left(), limit.top());
+    }
+    if(getPosTmp().bottom() > limit.bottom()){
+        setPosTmp(getPosTmp().left(), limit.bottom()-getHitbox().height());
+    }
+    collision = detectCollisionMap(level);
+    modifier = 1;
+    if(getVectorY() > 0){
+        modifier = -1;
+    }
+    while(collision){
+        setPosTmp(getPosTmp().left(), getPosTmp().top()+modifier);
+        collision = detectCollisionMap(level);
+    }
+    validatePos();
 }
 

@@ -17,6 +17,7 @@ public:
     virtual void collide(Roomba * r);
     void jump();
     void endTurn();
+    void move(Level * const level, QRect limit);
 };
 
 #endif // PLAYER_H

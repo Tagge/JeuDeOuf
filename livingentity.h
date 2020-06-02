@@ -15,11 +15,12 @@ private:
     double maxSpeed = 6;
     double acceleration = 2;
     double health = 1;
+    int intangible = 0;
 
 public:
     LivingEntity();
     virtual void update(Level * const level) = 0;
-    void move(Level * const level, QRect limit);
+    virtual void move(Level * const level, QRect limit) = 0;
     bool detectCollisionMap(Level * const level);
     QVector<LivingEntity *> getCollidingEntities(double id, Level * const level);
     void validatePos();
@@ -39,6 +40,8 @@ public:
     inline virtual void collide(Roomba * r) {};
     double getHealth() const;
     void setHealth(double value);
+    int getIntangible() const;
+    void setIntangible(int value);
 };
 
 #endif // LIVINGENTITY_H

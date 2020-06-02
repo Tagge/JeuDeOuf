@@ -36,6 +36,7 @@ void CalculateThread::doCalculations()
         game->getLvl()->getEntity(idEntity)->endTurn();
         mutex.unlock();
     }
+
     int xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
     int halfWidth = game->getWidthOrigin()/2;
     int center = game->getLvl()->getXWindow()+halfWidth;

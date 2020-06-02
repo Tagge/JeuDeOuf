@@ -67,7 +67,7 @@ void LivingEntity::validatePos()
 {
     setHitbox(posTmp);
     QRectF pos = posTmp;
-    pos.setLeft(posTmp.left()-12);
+    pos.setLeft(posTmp.left()-(4.0/16.0)*constants::TILE_WIDTH);
     pos.setWidth(constants::TILE_WIDTH);
     setImagePos(pos);
 }

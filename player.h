@@ -9,15 +9,14 @@ class Level;
 class Player: public GroundEntity
 {
 private:
-    double jumpTime;
-    double maxSpeed = 6;
-    double acceleration = 2;
-    double jumpTop = 0.3333;
 public:
     Player();
     Player(int x, int y, const QMap<QString, Animation*> & animations);
     virtual void update(Level * const level);
+    virtual void collide(LivingEntity * e);
+    virtual void collide(Roomba * r);
     void jump();
+    void endTurn();
 };
 
 #endif // PLAYER_H

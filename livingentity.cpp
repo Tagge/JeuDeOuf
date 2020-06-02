@@ -2,6 +2,18 @@
 #include "header.h"
 #include <QDebug>
 
+
+
+double LivingEntity::getHealth() const
+{
+    return health;
+}
+
+void LivingEntity::setHealth(double value)
+{
+    health = value;
+}
+
 LivingEntity::LivingEntity():Entity()
 {
     vectorX = 0;
@@ -23,6 +35,19 @@ bool LivingEntity::detectCollisionMap(Level * const level)
         }
     }
     return collision;
+}
+
+QVector<LivingEntity *> LivingEntity::getCollidingEntities(double id, Level * const level)
+{
+    QVector<LivingEntity *> colliding;
+    for(int i = 0; i<level->getNbEntities(); i++)
+        if(i != id) {
+            LivingEntity * entity = level->getEntity(i);
+            if(entity->getHitbox().intersects(getHitbox())) {
+                colliding.push_back(entity);
+            }
+        }
+    return colliding;
 }
 
 void LivingEntity::move(Level * const level, QRect limit)
@@ -70,13 +95,4 @@ void LivingEntity::validatePos()
     pos.setLeft(posTmp.left()-12);
     pos.setWidth(constants::TILE_WIDTH);
     setImagePos(pos);
-}
-
-void LivingEntity::endTurn()
-{
-    vectorX *= 0.9;
-    if(vectorX < 0.1 && vectorX > -0.1){
-        vectorX = 0;
-    }
-    vectorY = 0;
 }

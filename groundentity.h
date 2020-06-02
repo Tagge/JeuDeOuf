@@ -10,6 +10,8 @@ private:
     double g;
     double gFast;
     double v0;
+    double jumpTime;
+    double jumpTop = 0.3333;
 public:
     GroundEntity();
     GroundEntity(double jumpHeight, double jumpTime);
@@ -24,6 +26,10 @@ public:
     inline void setGFast(double value) {gFast = value;};
     inline double getV0() const {return v0;};
     inline void setV0(double value) {v0 = value;};
+    inline double getJumpTime() {return jumpTime;};
+    inline double getJumpTop() {return jumpTop;};
+    inline void setJumpTime(double value) {jumpTime = value;};
+    inline void setJumpTop(double value) {jumpTop = value;};
 };
 
 #endif // GROUNDENTITY_H

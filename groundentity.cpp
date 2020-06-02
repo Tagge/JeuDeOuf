@@ -21,7 +21,6 @@ bool GroundEntity::onGround(Level * const level)
     }
     else{
         fallingTime++;
-        qDebug() << fallingTime;
         return false;
     }
 }

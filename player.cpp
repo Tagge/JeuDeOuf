@@ -2,10 +2,11 @@
 #include <QDebug>
 #include "math.h"
 #include "header.h"
+#include "roomba.h"
 
 Player::Player():GroundEntity(0, 0)
 {
-    jumpTime = 0;
+    setJumpTime(0);
 }
 
 Player::Player(int x, int y, const QMap<QString, Animation *> &animations):GroundEntity(constants::TILE_HEIGHT*3.33, 0.3333)
@@ -17,33 +18,34 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
     addAnimation(animations["character"]);
     addAnimation(animations["character_move"]);
     addAnimation(animations["character_jump"]);
-    acceleration = acceleration*constants::TILE_WIDTH/constants::FPS_CALCULATION;
-    maxSpeed = maxSpeed*constants::TILE_WIDTH/constants::FPS_CALCULATION;
-    jumpTime = 0;
+    addAnimation(animations["character_death"]);
+    setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
+    setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
+    setJumpTime(0);
 }
 
 void Player::update(Level * const level)
 {
     if(onGround(level)){
-        jumpTime = 0;
+        setJumpTime(0);
     }
     setAnimPos(0);
     if(level->getKey(0)){
         double x = getVectorX();
-        setVectorX(x-acceleration);
+        setVectorX(x-getAccel());
     }
     if(level->getKey(1)){
         double x = getVectorX();
-        setVectorX(x+acceleration);
+        setVectorX(x+getAccel());
     }
-    if(level->getKey(2) && jumpTime == 0 && getFallingTime() == 0){
-        jumpTime = 1;
+    if(level->getKey(2) && getJumpTime() == 0 && getFallingTime() == 0){
+        setJumpTime(1);
     }
-    if(getVectorX() > maxSpeed){
-        setVectorX(maxSpeed);
+    if(getVectorX() > getMaxSpeed()){
+        setVectorX(getMaxSpeed());
     }
-    if(getVectorX() < -maxSpeed){
-        setVectorX(-maxSpeed);
+    if(getVectorX() < -getMaxSpeed()){
+        setVectorX(-getMaxSpeed());
     }
     if(getVectorX() < -0.9){
         setAnimPos(1);
@@ -53,7 +55,7 @@ void Player::update(Level * const level)
         setAnimPos(1);
         setFacingBack(false);
     }
-    if(jumpTime > 0){
+    if(getJumpTime() > 0){
         setAnimPos(2);
         jump();
     }
@@ -64,18 +66,58 @@ void Player::update(Level * const level)
     move(level, limit);
 }
 
+void Player::collide(LivingEntity *e)
+{
+    e->collide(this);
+}
+
+void Player::collide(Roomba *r)
+{
+
+    //type collision
+    QRectF roomba = r->getHitbox();
+    QRectF player = getHitbox();
+    if(r->getHealth()>0) {
+        if(player.bottom() < roomba.bottom()) {
+            r->setHealth(r->getHealth()-1);
+            setJumpTime(getJumpTop() * constants::FPS_CALCULATION/2);
+        }
+        else {
+            setHealth(getHealth()-1);
+            setAnimPos(3);
+        }
+    } else {
+        if(player.left() < roomba.left()) {
+            r->setVectorX(0.05*constants::TILE_WIDTH);
+        } else if(player.right() > roomba.right()) {
+            r->setVectorX(-0.05*constants::TILE_WIDTH);
+        }
+    }
+}
+
+
+
 void Player::jump()
 {
     double y = getVectorY();
-    double t_1 = (jumpTime-1) / constants::FPS_CALCULATION;
-    double t = jumpTime / constants::FPS_CALCULATION;
+    double t_1 = (getJumpTime()-1) / constants::FPS_CALCULATION;
+    double t = getJumpTime() / constants::FPS_CALCULATION;
     double g = getG();
-    if(t > jumpTop){
+    if(t > getJumpTop()){
         g = getGFast();
     }
     double posT = 0.5*g*pow(t, 2)+getV0()*t;
     double posT_1 = 0.5*g*pow(t_1, 2)+getV0()*t_1;
     setVectorY(y-(posT-posT_1));
-    jumpTime++;
+    setJumpTime(getJumpTime()+1);
+}
+
+void Player::endTurn()
+{
+    setVectorX(getVectorX()*0.9);
+    if(getVectorX() < 0.1 && getVectorX() > -0.1){
+        setVectorX(0);
+    }
+    setVectorY(0);
 }
 

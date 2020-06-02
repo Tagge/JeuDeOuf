@@ -17,6 +17,7 @@ public:
     GroundEntity(double jumpHeight, double jumpTime);
     virtual void update(Level * const level) = 0;
     bool onGround(Level * const level);
+    bool underCeiling(Level * const level);
     void fall();
     inline int getFallingTime() const {return fallingTime;};
     inline void setFallingTime(int value) {fallingTime = value;};

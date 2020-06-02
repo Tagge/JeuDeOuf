@@ -4,7 +4,8 @@
 #include "animation.h"
 #include "sprite.h"
 
-
+class Player;
+class Roomba;
 
 class Entity
 {
@@ -25,6 +26,8 @@ public:
     inline unsigned int getAnimPos() const {return animPos;};
     inline void setAnimPos(unsigned int value) {animPos = value;};
     inline void setFacingBack(bool value) {facingBack = value;};
+    inline virtual void collide() {};
+    bool getFacingBack() const;
 };
 
 #endif // ENTITY_H

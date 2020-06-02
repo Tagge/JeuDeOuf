@@ -3,6 +3,11 @@
 #include <QMutex>
 #include <QDebug>
 
+bool Entity::getFacingBack() const
+{
+    return facingBack;
+}
+
 Entity::Entity()
 {
     animPos = 0;

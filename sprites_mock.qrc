@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/mock">
+        <file>sprites/air.png</file>
+        <file>sprites/block.png</file>
+        <file>sprites/block2.png</file>
+        <file>sprites/stickman.png</file>
+    </qresource>
+</RCC>

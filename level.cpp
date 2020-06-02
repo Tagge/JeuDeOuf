@@ -1,12 +1,14 @@
 #include "level.h"
 #include "player.h"
+#include "roomba.h"
 #include "header.h"
 #include <QDebug>
+
 
 //Mock level
 Level::Level()
 {   
-    int nbPix = 6;
+    int nbPix = 9;
     nbRows = 10;
     nbCols = 100;
 
@@ -19,8 +21,8 @@ Level::Level()
         map.push_back(QVector<Tile*>(nbCols));
     }
     //Design de la map
-    QString animationName[] = {"air", "ground", "block", "character", "character_move", "character_jump"};
-    QVector<QVector<QString>> fileName  = {{":/sprites/air.png"}, {":/sprites/Ground.png"}, {":/sprites/Block.png"}, {":/sprites/character/Character_0004.png"}, {":/sprites/character/Character_0001.png", ":/sprites/character/Character_0002.png", ":/sprites/character/Character_0003.png", ":/sprites/character/Character_0002.png"}, {":/sprites/character/Character_0000.png"}};
+    QString animationName[] = {"air", "ground", "block", "character", "character_move", "character_jump", "character_death", "roomba", "roomba_death"};
+    QVector<QVector<QString>> fileName  = {{":/sprites/air.png"}, {":/sprites/Ground.png"}, {":/sprites/Block.png"}, {":/sprites/character/Character_0004.png"}, {":/sprites/character/Character_0001.png", ":/sprites/character/Character_0002.png", ":/sprites/character/Character_0003.png", ":/sprites/character/Character_0002.png"}, {":/sprites/character/Character_0000.png"}, {":/sprites/character/Character_0005.png"}, {":/sprites/enemies/Roomba_0", ":/sprites/enemies/Roomba_1"}, {":/sprites/enemies/DeathRoomba"}};
     bool pixIsWall[] = {0, 1, 1, 0, 0};
     for(int row = 0; row < 7; row++){
         mapInt[row] = QVector<int>(nbCols, 0);
@@ -59,7 +61,9 @@ Level::Level()
         }
     }
     player = new Player(1, 6, animationsMap);
+    Roomba * roomba = new Roomba(22, 6, animationsMap);
     livingEntities.push_back(player);
+    livingEntities.push_back(roomba);
 
     keys.push_back(false);
     keys.push_back(false);

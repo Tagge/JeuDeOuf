@@ -21,9 +21,18 @@ bool GroundEntity::onGround(Level * const level)
     }
     else{
         fallingTime++;
-        qDebug() << fallingTime;
         return false;
     }
+}
+
+bool GroundEntity::underCeiling(Level * const level)
+{
+    QRectF pos = getHitbox();
+    setPosTmp(pos.left(), pos.top()-1);
+    if(detectCollisionMap(level)){
+        return true;
+    }
+    return false;
 }
 
 void GroundEntity::fall()

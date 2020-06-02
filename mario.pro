@@ -26,6 +26,7 @@ SOURCES += \
     main.cpp \
     gamewindow.cpp \
     player.cpp \
+    roomba.cpp \
     sprite.cpp \
     tile.cpp
 
@@ -40,6 +41,7 @@ HEADERS += \
     level.h \
     livingentity.h \
     player.h \
+    roomba.h \
     sprite.h \
     tile.h
 

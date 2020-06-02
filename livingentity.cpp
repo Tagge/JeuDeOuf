@@ -2,6 +2,28 @@
 #include "header.h"
 #include <QDebug>
 
+
+
+double LivingEntity::getHealth() const
+{
+    return health;
+}
+
+void LivingEntity::setHealth(double value)
+{
+    health = value;
+}
+
+int LivingEntity::getIntangible() const
+{
+    return intangible;
+}
+
+void LivingEntity::setIntangible(int value)
+{
+    intangible = value;
+}
+
 LivingEntity::LivingEntity():Entity()
 {
     vectorX = 0;
@@ -25,58 +47,24 @@ bool LivingEntity::detectCollisionMap(Level * const level)
     return collision;
 }
 
-void LivingEntity::move(Level * const level, QRect limit)
+QVector<LivingEntity *> LivingEntity::getCollidingEntities(double id, Level * const level)
 {
-    QRectF pos = getHitbox();
-    setPosTmp(pos.left()+(int)vectorX, pos.top());
-    if(getPosTmp().left() < limit.left()){
-        setPosTmp(limit.left(), posTmp.top());
-    }
-    if(getPosTmp().right() > limit.right()){
-        setPosTmp(limit.right()-getHitbox().width(), posTmp.top());
-    }
-    bool collision = detectCollisionMap(level);
-    int modifier = 1;
-    if(vectorX > 0){
-        modifier = -1;
-    }
-    while(collision){
-        setPosTmp(posTmp.left()+modifier, pos.top());
-        collision = detectCollisionMap(level);
-    }
-    setPosTmp(posTmp.left(), pos.top()+(int)vectorY);
-    if(getPosTmp().top() < limit.top()){
-        setPosTmp(posTmp.left(), limit.top());
-    }
-    if(getPosTmp().bottom() > limit.bottom()){
-        setPosTmp(posTmp.left(), limit.bottom()-getHitbox().height());
-    }
-    collision = detectCollisionMap(level);
-    modifier = 1;
-    if(vectorY > 0){
-        modifier = -1;
-    }
-    while(collision){
-        setPosTmp(posTmp.left(), posTmp.top()+modifier);
-        collision = detectCollisionMap(level);
-    }
-    validatePos();
+    QVector<LivingEntity *> colliding;
+    for(int i = 0; i<level->getNbEntities(); i++)
+        if(i != id) {
+            LivingEntity * entity = level->getEntity(i);
+            if(entity->getHitbox().intersects(getHitbox())) {
+                colliding.push_back(entity);
+            }
+        }
+    return colliding;
 }
 
 void LivingEntity::validatePos()
 {
     setHitbox(posTmp);
     QRectF pos = posTmp;
-    pos.setLeft(posTmp.left()-12);
+    pos.setLeft(posTmp.left()-(4.0/16.0)*constants::TILE_WIDTH);
     pos.setWidth(constants::TILE_WIDTH);
     setImagePos(pos);
-}
-
-void LivingEntity::endTurn()
-{
-    vectorX *= 0.9;
-    if(vectorX < 0.1 && vectorX > -0.1){
-        vectorX = 0;
-    }
-    vectorY = 0;
 }

@@ -27,6 +27,9 @@ void Player::update(Level * const level)
     if(onGround(level)){
         jumpTime = 0;
     }
+    if(underCeiling(level)){
+        jumpTime = jumpTop * constants::FPS_CALCULATION + 1;
+    }
     setAnimPos(0);
     if(level->getKey(0)){
         double x = getVectorX();
@@ -70,7 +73,7 @@ void Player::jump()
     double t_1 = (jumpTime-1) / constants::FPS_CALCULATION;
     double t = jumpTime / constants::FPS_CALCULATION;
     double g = getG();
-    if(t > jumpTop){
+    if(t >= jumpTop){
         g = getGFast();
     }
     double posT = 0.5*g*pow(t, 2)+getV0()*t;

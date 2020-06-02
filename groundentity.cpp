@@ -26,6 +26,16 @@ bool GroundEntity::onGround(Level * const level)
     }
 }
 
+bool GroundEntity::underCeiling(Level * const level)
+{
+    QRectF pos = getHitbox();
+    setPosTmp(pos.left(), pos.top()-1);
+    if(detectCollisionMap(level)){
+        return true;
+    }
+    return false;
+}
+
 void GroundEntity::fall()
 {
     double y = getVectorY();

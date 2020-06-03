@@ -16,9 +16,11 @@ public:
     virtual void collide(LivingEntity * e, Level * const l);
     virtual void collide(Roomba * r, Level * const l);
     virtual void collide(LuckyBlock * lb, Level * const l);
+    virtual void collide(PowerUp * pu, Level * const l);
     void jump();
     void endTurn();
     void move(Level * const level, QRect limit);
+    void healthChanged();
 };
 
 #endif // PLAYER_H

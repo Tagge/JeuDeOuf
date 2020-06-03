@@ -17,6 +17,7 @@ public:
     virtual void collide(LivingEntity * e, Level * const l);
     virtual void collide(Player * p, Level * const l);
     virtual void collide(LuckyBlock * lb, Level * const l);
+    virtual void collide(Roomba * r, Level * const l);
     virtual void endTurn();
     void move(Level * const level, QRect limit);
 };

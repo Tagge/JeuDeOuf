@@ -86,6 +86,7 @@ void Player::collide(Roomba *r)
         if(r->getHealth()>0) {
             if(player.bottom() < roomba.bottom()) {
                 r->setHealth(r->getHealth()-1);
+                r->setVectorX(0);
                 setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
             }
             else {
@@ -120,6 +121,11 @@ void Player::collide(Roomba *r)
             }
         }
     }
+}
+
+void Player::collide(LuckyBlock *lb)
+{
+
 }
 
 

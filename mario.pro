@@ -23,6 +23,7 @@ SOURCES += \
     groundentity.cpp \
     level.cpp \
     livingentity.cpp \
+    luckyblock.cpp \
     main.cpp \
     gamewindow.cpp \
     player.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     header.h \
     level.h \
     livingentity.h \
+    luckyblock.h \
     player.h \
     roomba.h \
     sprite.h \

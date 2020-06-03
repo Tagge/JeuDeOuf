@@ -30,10 +30,10 @@ void Roomba::update(Level * const level)
     } else {
         if(getHitbox().left() - level->getPlayer()->getHitbox().right() < 5*constants::TILE_WIDTH)
             if(getFacingBack()) {
-                setVectorX(-getMaxSpeed());
+                setVectorX(0);
             }
             else {
-                setVectorX(getMaxSpeed());
+                setVectorX(0);
             }
         }
     if(onGround(level)){
@@ -41,6 +41,9 @@ void Roomba::update(Level * const level)
     }
     if(getFallingTime() >  0) {
         fall();
+    }
+    if(getIntangible() > 0) {
+        setIntangible((getIntangible()+1)%constants::INTANGIBLE_FRAMES);
     }
     QRect limit(0, 0, level->getNbCols()*constants::TILE_WIDTH, level->getNbRows()*constants::TILE_HEIGHT);
     move(level, limit);
@@ -58,6 +61,48 @@ void Roomba::collide(Player *p)
 void Roomba::endTurn()
 {
 
+}
+
+void Roomba::move(Level * const level, QRect limit)
+{
+    QRectF pos = getHitbox();
+    setPosTmp(pos.left()+(int)getVectorX(), pos.top());
+    if(getPosTmp().left() < limit.left()){
+        setPosTmp(limit.left(), getPosTmp().top());
+    }
+    if(getPosTmp().right() > limit.right()){
+        setPosTmp(limit.right()-getHitbox().width(), getPosTmp().top());
+    }
+    bool collision = detectCollisionMap(level);
+    int modifier = 1;
+    if(getVectorX() > 0){
+        modifier = -1;
+    }
+    while(collision){
+        setPosTmp(getPosTmp().left()+modifier, pos.top());
+        collision = detectCollisionMap(level);
+        if(!collision) {
+            setVectorX(-getVectorX());
+        }
+    }
+
+    setPosTmp(getPosTmp().left(), pos.top()+(int)getVectorY());
+    if(getPosTmp().top() < limit.top()){
+        setPosTmp(getPosTmp().left(), limit.top());
+    }
+    if(getPosTmp().bottom() > limit.bottom()){
+        setPosTmp(getPosTmp().left(), limit.bottom()-getHitbox().height());
+    }
+    collision = detectCollisionMap(level);
+    modifier = 1;
+    if(getVectorY() > 0){
+        modifier = -1;
+    }
+    while(collision){
+        setPosTmp(getPosTmp().left(), getPosTmp().top()+modifier);
+        collision = detectCollisionMap(level);
+    }
+    validatePos();
 }
 
 

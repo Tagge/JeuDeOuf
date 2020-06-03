@@ -65,7 +65,7 @@ Level::Level()
         }
     }
     player = new Player(1, 6, animationsMap);
-    Roomba * roomba = new Roomba(10, 6, animationsMap);
+    Roomba * roomba = new Roomba(22, 6, animationsMap);
     livingEntities.push_back(player);
     livingEntities.push_back(roomba);
 

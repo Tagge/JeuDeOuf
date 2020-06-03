@@ -16,6 +16,7 @@ public:
     virtual void collide(LivingEntity * e);
     virtual void collide(Player * p);
     virtual void endTurn();
+    void move(Level * const level, QRect limit);
 };
 
 #endif // ROOMBA_H

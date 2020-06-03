@@ -14,6 +14,16 @@ void LivingEntity::setHealth(double value)
     health = value;
 }
 
+int LivingEntity::getIntangible() const
+{
+    return intangible;
+}
+
+void LivingEntity::setIntangible(int value)
+{
+    intangible = value;
+}
+
 LivingEntity::LivingEntity():Entity()
 {
     vectorX = 0;
@@ -48,44 +58,6 @@ QVector<LivingEntity *> LivingEntity::getCollidingEntities(double id, Level * co
             }
         }
     return colliding;
-}
-
-void LivingEntity::move(Level * const level, QRect limit)
-{
-    QRectF pos = getHitbox();
-    setPosTmp(pos.left()+(int)vectorX, pos.top());
-    if(getPosTmp().left() < limit.left()){
-        setPosTmp(limit.left(), posTmp.top());
-    }
-    if(getPosTmp().right() > limit.right()){
-        setPosTmp(limit.right()-getHitbox().width(), posTmp.top());
-    }
-    bool collision = detectCollisionMap(level);
-    int modifier = 1;
-    if(vectorX > 0){
-        modifier = -1;
-    }
-    while(collision){
-        setPosTmp(posTmp.left()+modifier, pos.top());
-        collision = detectCollisionMap(level);
-    }
-    setPosTmp(posTmp.left(), pos.top()+(int)vectorY);
-    if(getPosTmp().top() < limit.top()){
-        setPosTmp(posTmp.left(), limit.top());
-    }
-    if(getPosTmp().bottom() > limit.bottom()){
-        setPosTmp(posTmp.left(), limit.bottom()-getHitbox().height());
-    }
-    collision = detectCollisionMap(level);
-    modifier = 1;
-    if(vectorY > 0){
-        modifier = -1;
-    }
-    while(collision){
-        setPosTmp(posTmp.left(), posTmp.top()+modifier);
-        collision = detectCollisionMap(level);
-    }
-    validatePos();
 }
 
 void LivingEntity::validatePos()

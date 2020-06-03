@@ -3,7 +3,6 @@
 
 #include "level.h"
 #include "groundentity.h"
-#include "luckyblock.h"
 
 class Level;
 

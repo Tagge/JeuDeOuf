@@ -3,6 +3,16 @@
 #include "header.h"
 #include <QDebug>
 
+bool GroundEntity::getOnSolid() const
+{
+    return onSolid;
+}
+
+void GroundEntity::setOnSolid(bool value)
+{
+    onSolid = value;
+}
+
 GroundEntity::GroundEntity(double jumpHeight, double jumpTime) : LivingEntity()
 {
     fallingTime = 0;
@@ -15,11 +25,12 @@ bool GroundEntity::onGround(Level * const level)
 {
     QRectF pos = getHitbox();
     setPosTmp(pos.left(), pos.top()+1);
-    if(detectCollisionMap(level)){
+    if(detectCollisionMap(level) || onSolid){
         fallingTime = 0;
+        onSolid = false;
         return true;
     }
-    else{
+    else {
         fallingTime++;
         return false;
     }

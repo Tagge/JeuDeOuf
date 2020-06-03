@@ -5,9 +5,6 @@
 #include "sprite.h"
 #include "header.h"
 
-class Player;
-class Roomba;
-
 class Entity
 {
 private:

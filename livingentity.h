@@ -4,6 +4,9 @@
 #include "entity.h"
 #include "level.h"
 
+class Player;
+class Roomba;
+class LuckyBlock;
 class Level;
 
 class LivingEntity: public Entity
@@ -38,6 +41,7 @@ public:
     inline virtual void collide(LivingEntity * e) {};
     inline virtual void collide(Player * p) {};
     inline virtual void collide(Roomba * r) {};
+    inline virtual void collide(LuckyBlock * lb) {};
     double getHealth() const;
     void setHealth(double value);
     int getIntangible() const;

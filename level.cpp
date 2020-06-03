@@ -92,10 +92,10 @@ Level::Level(QString levelFileName)
         dataJson = levelFile.readAll();
         levelJson = levelJson.fromJson(dataJson);
         level = levelJson.object();
-        xWindow = level["start_x"].toInt();
-        yWindow = level["start_y"].toInt();
         nbRows = level["rows"].toInt();
         nbCols = level["columns"].toInt();
+        xWindow = level["start_x"].toInt()*constants::TILE_WIDTH;
+        yWindow = (nbRows-level["start_y"].toInt())*constants::TILE_HEIGHT;
         for(int row = 0; row < nbRows; row++){
             map.push_back(QVector<Tile*>(nbCols));
         }

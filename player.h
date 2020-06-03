@@ -3,6 +3,7 @@
 
 #include "level.h"
 #include "groundentity.h"
+#include "luckyblock.h"
 
 class Level;
 
@@ -15,6 +16,7 @@ public:
     virtual void update(Level * const level);
     virtual void collide(LivingEntity * e);
     virtual void collide(Roomba * r);
+    virtual void collide(LuckyBlock * lb);
     void jump();
     void endTurn();
     void move(Level * const level, QRect limit);

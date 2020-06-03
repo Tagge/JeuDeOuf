@@ -14,7 +14,7 @@ private:
     QRectF posTmp;
     double maxSpeed = 6;
     double acceleration = 2;
-    double health = 1;
+    double health = 0;
     int intangible = 0;
 
 public:

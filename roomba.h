@@ -9,6 +9,7 @@ class Level;
 class Roomba: public GroundEntity
 {
 private:
+    bool started;
 public:
     Roomba();
     Roomba(int x, int y, const QMap<QString, Animation *> &animations);

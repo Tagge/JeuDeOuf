@@ -20,7 +20,9 @@ Roomba::Roomba(int x, int y, const QMap<QString, Animation *> &animations):Groun
     setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setJumpTime(0);
-    setFacingBack(true);
+    setFacingBack(false);
+    setHealth(1);
+    started = 0;
 }
 
 void Roomba::update(Level * const level)
@@ -28,14 +30,17 @@ void Roomba::update(Level * const level)
     if(getHealth()<1) {
         setAnimPos(1);
     } else {
-        if(getHitbox().left() - level->getPlayer()->getHitbox().right() < 5*constants::TILE_WIDTH)
+        if(getHitbox().left() - level->getPlayer()->getHitbox().right() < 10*constants::TILE_WIDTH && started == 0) {
             if(getFacingBack()) {
-                setVectorX(0);
+                setVectorX(-0.05*constants::TILE_WIDTH);
             }
             else {
-                setVectorX(0);
+                setVectorX(0.05*constants::TILE_WIDTH);
             }
+        started = 1;
+        qDebug() << "started = " << started;
         }
+    }
     if(onGround(level)){
         setJumpTime(0);
     }
@@ -83,6 +88,7 @@ void Roomba::move(Level * const level, QRect limit)
         collision = detectCollisionMap(level);
         if(!collision) {
             setVectorX(-getVectorX());
+            setFacingBack(!getFacingBack());
         }
     }
 

@@ -167,6 +167,10 @@ void Level::addAnimationFromJson(const QJsonObject &object)
         QJsonArray characterDeath = object["character_death"].toArray();
         addAnimation(characterDeath, "character_death");
     }
+    else if(entityName == "LuckyBlock"){
+        QJsonArray lucky = object["lucky"].toArray();
+        addAnimation(lucky, "lucky");
+    }
 }
 
 void Level::addAnimation(const QJsonArray &images, QString name)
@@ -188,5 +192,8 @@ void Level::createEntityFromJson(QString name, int x, int y)
     else if(name == "Player"){
         player = new Player(x, y, animationsMap);
         livingEntities.push_back(player);
+    }
+    else if(name == "LuckyBlock"){
+        livingEntities.push_back(new LuckyBlock(x, y, animationsMap, 1));
     }
 }

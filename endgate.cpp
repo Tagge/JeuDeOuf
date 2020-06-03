@@ -26,7 +26,7 @@ void EndGate::collide(LivingEntity *e, Level * const l)
 void EndGate::collide(Player *p, Level *l)
 {
     l->setWin(true);
-    p->setAnimPos(getHealth()*3+2);
+    p->setAnimPos(p->getHealth()*3+2);
 }
 
 void EndGate::move(Level * const level, QRect limit){}

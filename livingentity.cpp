@@ -63,8 +63,5 @@ QVector<LivingEntity *> LivingEntity::getCollidingEntities(double id, Level * co
 void LivingEntity::validatePos()
 {
     setHitbox(posTmp);
-    QRectF pos = posTmp;
-    pos.setLeft(posTmp.left()-(4.0/16.0)*constants::TILE_WIDTH);
-    pos.setWidth(constants::TILE_WIDTH);
-    setImagePos(pos);
+    setImagePos(posTmp);
 }

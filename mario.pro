@@ -19,6 +19,7 @@ SOURCES += \
     animation.cpp \
     calculatethread.cpp \
     drawthread.cpp \
+    endgate.cpp \
     entity.cpp \
     groundentity.cpp \
     level.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     animation.h \
     calculatethread.h \
     drawthread.h \
+    endgate.h \
     entity.h \
     gamewindow.h \
     groundentity.h \

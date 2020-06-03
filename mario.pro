@@ -30,6 +30,7 @@ SOURCES += \
     player.cpp \
     powerup.cpp \
     roomba.cpp \
+    spawngate.cpp \
     sprite.cpp \
     tile.cpp
 
@@ -48,6 +49,7 @@ HEADERS += \
     player.h \
     powerup.h \
     roomba.h \
+    spawngate.h \
     sprite.h \
     tile.h
 

@@ -9,7 +9,6 @@ EndGate::EndGate()
 
 EndGate::EndGate(int x, int y, const QMap<QString, Animation *> &animations)
 {
-    qDebug() << x << y;
     QRectF hitbox(x*constants::TILE_WIDTH, (y-2)*constants::TILE_HEIGHT, constants::TILE_WIDTH, constants::TILE_HEIGHT*3);
     setRelativePosImage(1);
     setImagePos(hitbox);

@@ -13,7 +13,7 @@ Player::Player():GroundEntity(0, 0)
 
 Player::Player(int x, int y, const QMap<QString, Animation *> &animations):GroundEntity(constants::TILE_HEIGHT*3.33, 0.3333)
 {
-    QRectF hitbox(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH*0.5, constants::TILE_HEIGHT);
+    QRectF hitbox(x*constants::TILE_WIDTH, (y-1)*constants::TILE_HEIGHT, constants::TILE_WIDTH*0.5, constants::TILE_HEIGHT);
     setRelativePosImage(0.25);
     setImagePos(hitbox);
     setHitbox(hitbox);

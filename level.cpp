@@ -4,6 +4,7 @@
 #include "luckyblock.h"
 #include "header.h"
 #include "endgate.h"
+#include "spawngate.h"
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
@@ -187,6 +188,10 @@ void Level::addAnimationFromJson(const QJsonObject &object)
         QJsonArray endGate = object["end_gate"].toArray();
         addAnimation(endGate, "end_gate");
     }
+    else if(entityName == "SpawnGate"){
+        QJsonArray endGate = object["spawn_gate"].toArray();
+        addAnimation(endGate, "spawn_gate");
+    }
 }
 
 void Level::addAnimation(const QJsonArray &images, QString name)
@@ -214,5 +219,8 @@ void Level::createEntityFromJson(QString name, int x, int y, const QJsonObject &
     }
     else if(name == "EndGate"){
         livingEntities.push_back(new EndGate(x, y, animationsMap));
+    }
+    else if(name == "SpawnGate"){
+        livingEntities.push_back(new SpawnGate(x, y, animationsMap));
     }
 }

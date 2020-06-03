@@ -37,7 +37,10 @@ void Entity::addAnimation(Animation *value)
 
 void Entity::setImagePos(QRectF value)
 {
-    //value.setLeft(value.left()-relativePosImage);
+    int width = value.width();
+    int newLeft = value.left()-relativePosImage;
+    value.setLeft(newLeft);
+    value.setWidth(width+relativePosImage*2);
     imagePos = value;
 }
 

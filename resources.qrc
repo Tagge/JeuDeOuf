@@ -20,5 +20,6 @@
         <file>sprites/enemies/Roomba_1.png</file>
         <file>sprites/character/Character_0005.png</file>
         <file>sprites/enemies/DeathRoomba.png</file>
+        <file>levels/level_test.json</file>
     </qresource>
 </RCC>

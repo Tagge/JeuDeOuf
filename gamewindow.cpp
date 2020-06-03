@@ -33,7 +33,7 @@ GameWindow::~GameWindow()
 void GameWindow::createGame()
 {
     ui->levelTest->hide();
-    lvl = new Level();
+    lvl = new Level(":/levels/level_test.json");
     inGame = 1;
     drawThread->start();
     QThread::msleep(5);

@@ -1,11 +1,11 @@
 #include "powerup.h"
 
-PowerUp::PowerUp():GroundEntity(0,0)
+PowerUp::PowerUp()
 {
 
 }
 
-PowerUp::PowerUp(int x, int y, Animation * anim):GroundEntity(0,0)
+PowerUp::PowerUp(int x, int y, Animation * anim)
 {
     QRectF hitbox(x, y, constants::TILE_WIDTH/2, constants::TILE_HEIGHT/2);
     QRectF posImage(x, y, constants::TILE_WIDTH/2, constants::TILE_HEIGHT/2);
@@ -16,7 +16,9 @@ PowerUp::PowerUp(int x, int y, Animation * anim):GroundEntity(0,0)
 
 void PowerUp::update(Level * const level)
 {
-
+    if(getIntangible() > 0) {
+        setIntangible((getIntangible()-1));
+    }
 }
 
 void PowerUp::collide(LivingEntity *e, Level * const l)

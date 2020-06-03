@@ -1,9 +1,9 @@
 #ifndef POWERUP_H
 #define POWERUP_H
 
-#include "groundentity.h"
+#include "livingentity.h"
 
-class PowerUp: public GroundEntity
+class PowerUp: public LivingEntity
 {
 public:
     PowerUp();

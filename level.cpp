@@ -164,6 +164,12 @@ void Level::addAnimationFromJson(const QJsonObject &object)
         addAnimation(characterMove, "character_move");
         QJsonArray characterJump = object["character_jump"].toArray();
         addAnimation(characterJump, "character_jump");
+        QJsonArray character2 = object["character2"].toArray();
+        addAnimation(character2, "character2");
+        QJsonArray characterMove2 = object["character2_move"].toArray();
+        addAnimation(characterMove2, "character_move2");
+        QJsonArray characterJump2 = object["character2_jump"].toArray();
+        addAnimation(characterJump2, "character_jump2");
         QJsonArray characterDeath = object["character_death"].toArray();
         addAnimation(characterDeath, "character_death");
     }

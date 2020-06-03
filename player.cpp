@@ -4,6 +4,7 @@
 #include "header.h"
 #include "roomba.h"
 #include "luckyblock.h"
+#include "powerup.h"
 #include <stdlib.h>
 
 Player::Player():GroundEntity(0, 0)
@@ -20,6 +21,9 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
     addAnimation(animations["character"]);
     addAnimation(animations["character_move"]);
     addAnimation(animations["character_jump"]);
+    addAnimation(animations["character2"]);
+    addAnimation(animations["character_move2"]);
+    addAnimation(animations["character_jump2"]);
     addAnimation(animations["character_death"]);
     setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
@@ -28,16 +32,16 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
 
 void Player::update(Level * const level)
 {
-    if(onGround(level)){
-        setJumpTime(0);
-    }
     if(underCeiling(level)){
         setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
     }
-    if(getIntangible() > 0) {
-        setIntangible((getIntangible()+1)%constants::INTANGIBLE_FRAMES);
+    if(onGround(level)){
+        setJumpTime(0);
     }
-    setAnimPos(0);
+    if(getIntangible() > 0) {
+        setIntangible((getIntangible()-1));
+    }
+    setAnimPos(getHealth()*3);
     if(level->getKey(0)){
         double x = getVectorX();
         setVectorX(x-getAccel());
@@ -56,15 +60,15 @@ void Player::update(Level * const level)
         setVectorX(-getMaxSpeed());
     }
     if(getVectorX() < -0.9){
-        setAnimPos(1);
+        setAnimPos(getHealth()*3+1);
         setFacingBack(true);
     }
     else if(getVectorX() > 0.9){
-        setAnimPos(1);
+        setAnimPos(getHealth()*3+1);
         setFacingBack(false);
     }
     if(getJumpTime() > 0){
-        setAnimPos(2);
+        setAnimPos(getHealth()*3+2);
         jump();
     }
     else if(getFallingTime() >  0){
@@ -91,10 +95,9 @@ void Player::collide(Roomba *r, Level * const l)
                 setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
             }
             else {
-                qDebug() << "touché";
                 setHealth(getHealth()-1);
-                setAnimPos(3);
-                setIntangible(1);
+                setIntangible(constants::FPS_CALCULATION/6);
+                healthChanged();
             }
         } else {
             if(r->getIntangible() == 0) {
@@ -107,16 +110,16 @@ void Player::collide(Roomba *r, Level * const l)
                     } else {
                         r->setVectorX(-0.15*constants::TILE_WIDTH);
                     }
+                    r->setIntangible(constants::FPS_CALCULATION/6);
                 } else {
                     if(player.bottom() < roomba.bottom()) {
                         r->setVectorX(0);
                         setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
                     }
                     else {
-                        qDebug() << "touché";
                         setHealth(getHealth()-1);
-                        setAnimPos(3);
-                        setIntangible(1);
+                        setIntangible(constants::FPS_CALCULATION/4);
+                        healthChanged();
                     }
                 }
             }
@@ -165,6 +168,16 @@ void Player::collide(LuckyBlock *lb, Level * const l)
     }
     validatePos();
 
+}
+
+void Player::collide(PowerUp * pu, Level * const l)
+{
+    if(pu->getIntangible()==0) {
+        setHealth(1);
+        healthChanged();
+        pu->setHealth(-1);
+        pu->setIntangible(constants::FPS_CALCULATION*3);
+    }
 }
 
 
@@ -229,5 +242,20 @@ void Player::move(Level * const level, QRect limit)
         collision = detectCollisionMap(level);
     }
     validatePos();
+}
+
+void Player::healthChanged()
+{
+    if(getHealth() == 0) {
+        QRectF hitbox = getHitbox();
+        hitbox.setTop(hitbox.top()+hitbox.height()/2);
+        setHitbox(hitbox);
+    }
+    else if(getHealth() > 0) {
+        QRectF hitbox = getHitbox();
+        hitbox.setTop(hitbox.top()-hitbox.height());
+        setHitbox(hitbox);
+    }
+
 }
 

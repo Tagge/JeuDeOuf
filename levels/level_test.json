@@ -55,7 +55,10 @@
     {
       "type" : "LuckyBlock",
       "id" : 2,
-      "lucky" : ["sprites/PowerBrick.png"]
+      "lucky" : ["sprites/PowerBrick.png"],
+      "parameters" : {
+        "object" : 1
+      }
     }
   ],
   "entities_map" : [

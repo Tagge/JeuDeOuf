@@ -122,11 +122,13 @@ Level::Level(QString levelFileName)
             }
         }
         QMap<int, QString> mapEntities;
+        QMap<int, QJsonObject> mapParameters;
         QJsonArray entitiesData = level["entities"].toArray();
         int nbEntityTypes = entitiesData.size();
         for(int entityId = 0; entityId < nbEntityTypes; entityId++){
             QJsonObject entityData = entitiesData[entityId].toObject();
             mapEntities.insert(entityData["id"].toInt(), entityData["type"].toString());
+            mapParameters.insert(entityData["id"].toInt(), entityData["parameters"].toObject());
             addAnimationFromJson(entityData);
         }
         QJsonArray mapEntitiesJson = level["entities_map"].toArray();
@@ -135,13 +137,16 @@ Level::Level(QString levelFileName)
             for(int col = 0; col < nbCols; col++){
                 int idEntity = entitiesRow[col].toInt();
                 if(idEntity > 0){
-                    createEntityFromJson(mapEntities[idEntity], col, row);
+                    if(!mapParameters[idEntity].isEmpty()){
+                        qDebug() << "no param";
+                    }
+                    createEntityFromJson(mapEntities[idEntity], col, row, mapParameters[idEntity]);
                 }
             }
         }
         QJsonObject player = level["player"].toObject();
         addAnimationFromJson(player);
-        createEntityFromJson("Player", player["x"].toInt(), player["y"].toInt());
+        createEntityFromJson("Player", player["x"].toInt(), player["y"].toInt(), QJsonObject());
     }
     else{
         qDebug() << "File not found";
@@ -184,7 +189,7 @@ void Level::addAnimation(const QJsonArray &images, QString name)
     animationsMap.insert(name, animation);
 }
 
-void Level::createEntityFromJson(QString name, int x, int y)
+void Level::createEntityFromJson(QString name, int x, int y, const QJsonObject & param)
 {
     if(name == "Roomba"){
         livingEntities.push_back(new Roomba(x, y, animationsMap));
@@ -194,6 +199,6 @@ void Level::createEntityFromJson(QString name, int x, int y)
         livingEntities.push_back(player);
     }
     else if(name == "LuckyBlock"){
-        livingEntities.push_back(new LuckyBlock(x, y, animationsMap, 1));
+        livingEntities.push_back(new LuckyBlock(x, y, animationsMap, param["object"].toInt()));
     }
 }

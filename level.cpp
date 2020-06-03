@@ -1,6 +1,7 @@
 #include "level.h"
 #include "player.h"
 #include "roomba.h"
+#include "luckyblock.h"
 #include "header.h"
 #include <QDebug>
 
@@ -61,8 +62,8 @@ Level::Level()
         }
     }
     player = new Player(1, 6, animationsMap);
-    Roomba * roomba = new Roomba(22, 6, animationsMap);
-    LuckyBlock * lb = new LuckyBlock(18,4, animationsMap, 1);
+    Roomba * roomba = new Roomba(14, 6, animationsMap);
+    LuckyBlock * lb = new LuckyBlock(6,6, animationsMap, 1);
     livingEntities.push_back(player);
     livingEntities.push_back(roomba);
     livingEntities.push_back(lb);

@@ -4,9 +4,6 @@
 #include "animation.h"
 #include "sprite.h"
 
-class Player;
-class Roomba;
-
 class Entity
 {
 private:

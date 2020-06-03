@@ -16,6 +16,7 @@ public:
     virtual void update(Level * const level);
     virtual void collide(LivingEntity * e);
     virtual void collide(Player * p);
+    virtual void collide(LuckyBlock * lb);
     virtual void endTurn();
     void move(Level * const level, QRect limit);
 };

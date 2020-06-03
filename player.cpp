@@ -3,6 +3,8 @@
 #include "math.h"
 #include "header.h"
 #include "roomba.h"
+#include "luckyblock.h"
+#include <stdlib.h>
 
 Player::Player():GroundEntity(0, 0)
 {
@@ -11,10 +13,9 @@ Player::Player():GroundEntity(0, 0)
 
 Player::Player(int x, int y, const QMap<QString, Animation *> &animations):GroundEntity(constants::TILE_HEIGHT*3.33, 0.3333)
 {
-    QRectF hitbox(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH*8/16, constants::TILE_HEIGHT);
-    double xTmp = (x-4.0/16.0)*constants::TILE_WIDTH;
-    QRectF posImage(xTmp, y*constants::TILE_HEIGHT, constants::TILE_WIDTH, constants::TILE_HEIGHT);
-    setImagePos(posImage);
+    QRectF hitbox(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH*0.5, constants::TILE_HEIGHT);
+    setRelativePosImage(0.25);
+    setImagePos(hitbox);
     setHitbox(hitbox);
     addAnimation(animations["character"]);
     addAnimation(animations["character_move"]);
@@ -125,6 +126,52 @@ void Player::collide(Roomba *r)
 
 void Player::collide(LuckyBlock *lb)
 {
+    QRectF pos = getHitbox();
+    QRectF lucky = lb->getHitbox();
+    setPosTmp(pos.left(), pos.top());
+    int direction;
+    int leftdir = abs(pos.right() - lucky.left());
+    int topdir = abs(pos.bottom() - lucky.top());
+    int rightdir = abs(pos.left() - lucky.right());
+    int botdir = abs(pos.top() - lucky.bottom());
+    if(leftdir <= topdir && leftdir <= rightdir && leftdir <= botdir) {
+        direction = 1;
+        qDebug() << "touched from left";
+        qDebug() << leftdir << topdir << rightdir << botdir;
+    } else if (topdir <= leftdir && topdir <= rightdir && topdir <= botdir){
+        direction = 2;
+        qDebug() << "touched from top";
+        qDebug() << leftdir << topdir << rightdir << botdir;
+    } else if (rightdir <= leftdir && rightdir <= topdir && rightdir <= botdir) {
+        direction = 3;
+        qDebug() << "touched from right";
+        qDebug() << leftdir << topdir << rightdir << botdir;
+    } else {
+        direction = 4;
+        qDebug() << "touched from bot";
+        qDebug() << leftdir << topdir << rightdir << botdir;
+    }
+
+    //Gauche
+    if(direction == 1) {
+        setPosTmp(lucky.left()-getHitbox().width(),getPosTmp().top());
+    }
+    //Haut
+    else if (direction == 2) {
+        setPosTmp(getPosTmp().left(), lucky.top()-getHitbox().height());
+        setOnSolid(true);
+    }
+    //Droite
+    else if (direction == 3) {
+        setPosTmp(lucky.right(), getPosTmp().top());
+    }
+    //Bas
+    else {
+        setPosTmp(getPosTmp().left(), lucky.bottom());
+        setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
+        lb->dropItem();
+    }
+    validatePos();
 
 }
 

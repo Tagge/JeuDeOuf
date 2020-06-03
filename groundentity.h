@@ -12,6 +12,7 @@ private:
     double v0;
     double jumpTime;
     double jumpTop = 0.3333;
+    bool onSolid = false;
 public:
     GroundEntity();
     GroundEntity(double jumpHeight, double jumpTime);
@@ -31,6 +32,8 @@ public:
     inline double getJumpTop() {return jumpTop;};
     inline void setJumpTime(double value) {jumpTime = value;};
     inline void setJumpTop(double value) {jumpTop = value;};
+    bool getOnSolid() const;
+    void setOnSolid(bool value);
 };
 
 #endif // GROUNDENTITY_H

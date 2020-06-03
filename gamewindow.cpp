@@ -37,7 +37,7 @@ void GameWindow::createGame()
     inGame = 1;
     drawThread->start();
     QThread::msleep(5);
-    //calculateThread->start();
+    calculateThread->start();
     setFocus();
 }
 

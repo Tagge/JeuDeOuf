@@ -76,6 +76,9 @@ Level::Level()
 
 Level::Level(QString levelFileName)
 {
+    keys.push_back(false);
+    keys.push_back(false);
+    keys.push_back(false);
     QJsonDocument levelJson;
     QByteArray dataJson;
     QFile levelFile(levelFileName);
@@ -107,7 +110,6 @@ Level::Level(QString levelFileName)
             }
             animationsMap.insert(tileData["id"].toString(), animation);
         }
-        QJsonObject obj = tilesData[0].toObject();
         QJsonArray mapJson = level["map"].toArray();
         for(int row = 0; row < nbRows; row++){
             QJsonArray tilesRow = mapJson[row].toArray();
@@ -119,28 +121,69 @@ Level::Level(QString levelFileName)
         QMap<int, QString> mapEntities;
         QJsonArray entitiesData = level["entities"].toArray();
         int nbEntityTypes = entitiesData.size();
-        /*for(int entityId = 0; entityId < nbTilesData; entityId++){
+        for(int entityId = 0; entityId < nbEntityTypes; entityId++){
             QJsonObject entityData = entitiesData[entityId].toObject();
-            mapEntities.insert(entityData["id"].toInt(), entityData["name"].toString());
-            Animation * animation = new Animation();
-            QJsonArray roombaSprites = entityData["roomba"].toArray();
-            int fileNumber = roombaSprites.size();
-            for(int pic = 0; pic < fileNumber; pic++){
-                QPixmap * pixmap = new QPixmap(":/"+roombaSprites[pic].toString());
-                animation->addImage(pixmap);
+            mapEntities.insert(entityData["id"].toInt(), entityData["type"].toString());
+            addAnimationFromJson(entityData);
+        }
+        QJsonArray mapEntitiesJson = level["entities_map"].toArray();
+        for(int row = 0; row < nbRows; row++){
+            QJsonArray entitiesRow = mapEntitiesJson[row].toArray();
+            for(int col = 0; col < nbCols; col++){
+                int idEntity = entitiesRow[col].toInt();
+                if(idEntity > 0){
+                    createEntityFromJson(mapEntities[idEntity], col, row);
+                }
             }
-            animationsMap.insert("roomba", animation);
-            Animation * animDeath = new Animation();
-            QJsonArray deathRoombaSprites = entityData["roomba_death"].toArray();
-            fileNumber = deathRoombaSprites.size();
-            for(int pic = 0; pic < fileNumber; pic++){
-                QPixmap * pixmap = new QPixmap(":/"+deathRoombaSprites[pic].toString());
-                animDeath->addImage(pixmap);
-            }
-            animationsMap.insert("roomba_death", animDeath);
-        }*/
+        }
+        QJsonObject player = level["player"].toObject();
+        addAnimationFromJson(player);
+        createEntityFromJson("Player", player["x"].toInt(), player["y"].toInt());
     }
     else{
         qDebug() << "File not found";
+    }
+}
+
+void Level::addAnimationFromJson(const QJsonObject &object)
+{
+    QString entityName = object["type"].toString();
+    if(entityName == "Roomba"){
+        QJsonArray roombaSprites = object["roomba"].toArray();
+        addAnimation(roombaSprites, "roomba");
+        QJsonArray deathRoombaSprites = object["roomba_death"].toArray();
+        addAnimation(deathRoombaSprites, "roomba_death");
+    }
+    else if(entityName == "Player"){
+        QJsonArray character = object["character"].toArray();
+        addAnimation(character, "character");
+        QJsonArray characterMove = object["character_move"].toArray();
+        addAnimation(characterMove, "character_move");
+        QJsonArray characterJump = object["character_jump"].toArray();
+        addAnimation(characterJump, "character_jump");
+        QJsonArray characterDeath = object["character_death"].toArray();
+        addAnimation(characterDeath, "character_death");
+    }
+}
+
+void Level::addAnimation(const QJsonArray &images, QString name)
+{
+    Animation * animation = new Animation();
+    int fileNumber = images.size();
+    for(int pic = 0; pic < fileNumber; pic++){
+        QPixmap * pixmap = new QPixmap(":/"+images[pic].toString());
+        animation->addImage(pixmap);
+    }
+    animationsMap.insert(name, animation);
+}
+
+void Level::createEntityFromJson(QString name, int x, int y)
+{
+    if(name == "Roomba"){
+        livingEntities.push_back(new Roomba(x, y, animationsMap));
+    }
+    else if(name == "Player"){
+        player = new Player(x, y, animationsMap);
+        livingEntities.push_back(player);
     }
 }

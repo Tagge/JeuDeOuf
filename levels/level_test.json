@@ -8,19 +8,19 @@
       "id" : "0",
       "paths" : ["sprites/air.png"],
       "images_number" : 1,
-      "wall" : 0
+      "wall" : false
     },
     {
       "id" : "1",
       "paths" : ["sprites/Ground.png"],
       "images_number" : 1,
-      "wall" : 1
+      "wall" : true
     },
     {
       "id" : "2",
       "paths" : ["sprites/Block.png"],
       "images_number" : 1,
-      "wall" : 1
+      "wall" : true
     }
   ],
   "map" : [
@@ -41,7 +41,7 @@
     }
   ],
   "entities_map" : [
-    [0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+    [2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
     [0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
     [0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
     [0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
@@ -52,6 +52,7 @@
   "player" : {
     "x" : 1,
     "y" : 5,
+    "type" : "Player",
     "character" : ["sprites/character/Character_0004.png"],
     "character_move" : ["sprites/character/Character_0004.png"],
     "character_jump" : ["sprites/character/Character_0001.png", "sprites/character/Character_0002.png", "sprites/character/Character_0003.png", "sprites/character/Character_0002.png"],

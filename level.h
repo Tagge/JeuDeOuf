@@ -15,6 +15,9 @@ class Level
 public:
     Level();
     Level(QString levelFileName);
+    void addAnimationFromJson(const QJsonObject & object);
+    void addAnimation(const QJsonArray & images, QString name);
+    void createEntityFromJson(QString name, int x, int y);
     inline QMap<QString, Animation*> getAnimationMap() const {return animationsMap;};
     inline int getNbRows() const {return nbRows;};
     inline int getNbCols() const {return nbCols;};

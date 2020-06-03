@@ -13,7 +13,7 @@ Roomba::Roomba():GroundEntity(0, 0)
 
 Roomba::Roomba(int x, int y, const QMap<QString, Animation *> &animations):GroundEntity(constants::TILE_HEIGHT*3.33, 0.3333)
 {
-    QRectF hitbox(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH, constants::TILE_HEIGHT);
+    QRectF hitbox(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH, constants::TILE_HEIGHT*11.0/16.0);
     setImagePos(hitbox);
     setHitbox(hitbox);
     addAnimation(animations["roomba"]);

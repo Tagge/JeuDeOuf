@@ -3,6 +3,10 @@
 #include "roomba.h"
 #include "header.h"
 #include <QDebug>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 
 //Mock level
@@ -68,4 +72,75 @@ Level::Level()
     keys.push_back(false);
     keys.push_back(false);
     keys.push_back(false);
+}
+
+Level::Level(QString levelFileName)
+{
+    QJsonDocument levelJson;
+    QByteArray dataJson;
+    QFile levelFile(levelFileName);
+    QJsonObject level;
+    QMap<QString, bool> isWall;
+    QVector<QString> animationsName;
+    if(levelFile.open(QIODevice::ReadOnly | QIODevice::Text)){
+        dataJson = levelFile.readAll();
+        levelJson = levelJson.fromJson(dataJson);
+        level = levelJson.object();
+        xWindow = level["start_x"].toInt();
+        yWindow = level["start_y"].toInt();
+        nbRows = level["rows"].toInt();
+        nbCols = level["columns"].toInt();
+        for(int row = 0; row < nbRows; row++){
+            map.push_back(QVector<Tile*>(nbCols));
+        }
+        QJsonArray tilesData = level["tiles"].toArray();
+        int nbTilesData = tilesData.size();
+        for(int tileId = 0; tileId < nbTilesData; tileId++){
+            QJsonObject tileData = tilesData[tileId].toObject();
+            isWall.insert(tileData["id"].toString(), tileData["wall"].toBool());
+            Animation * animation = new Animation();
+            int fileNumber = tileData["images_number"].toInt();
+            QJsonArray paths = tileData["paths"].toArray();
+            for(int pic = 0; pic < fileNumber; pic++){
+                QPixmap * pixmap = new QPixmap(":/"+paths[pic].toString());
+                animation->addImage(pixmap);
+            }
+            animationsMap.insert(tileData["id"].toString(), animation);
+        }
+        QJsonObject obj = tilesData[0].toObject();
+        QJsonArray mapJson = level["map"].toArray();
+        for(int row = 0; row < nbRows; row++){
+            QJsonArray tilesRow = mapJson[row].toArray();
+            for(int col = 0; col < nbCols; col++){
+                QString idTile = tilesRow[col].toString();
+                map[row][col] = new Tile(isWall[idTile], col, row, animationsMap[idTile]);
+            }
+        }
+        QMap<int, QString> mapEntities;
+        QJsonArray entitiesData = level["entities"].toArray();
+        int nbEntityTypes = entitiesData.size();
+        /*for(int entityId = 0; entityId < nbTilesData; entityId++){
+            QJsonObject entityData = entitiesData[entityId].toObject();
+            mapEntities.insert(entityData["id"].toInt(), entityData["name"].toString());
+            Animation * animation = new Animation();
+            QJsonArray roombaSprites = entityData["roomba"].toArray();
+            int fileNumber = roombaSprites.size();
+            for(int pic = 0; pic < fileNumber; pic++){
+                QPixmap * pixmap = new QPixmap(":/"+roombaSprites[pic].toString());
+                animation->addImage(pixmap);
+            }
+            animationsMap.insert("roomba", animation);
+            Animation * animDeath = new Animation();
+            QJsonArray deathRoombaSprites = entityData["roomba_death"].toArray();
+            fileNumber = deathRoombaSprites.size();
+            for(int pic = 0; pic < fileNumber; pic++){
+                QPixmap * pixmap = new QPixmap(":/"+deathRoombaSprites[pic].toString());
+                animDeath->addImage(pixmap);
+            }
+            animationsMap.insert("roomba_death", animDeath);
+        }*/
+    }
+    else{
+        qDebug() << "File not found";
+    }
 }

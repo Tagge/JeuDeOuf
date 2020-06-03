@@ -14,6 +14,7 @@ class Level
 {
 public:
     Level();
+    Level(QString levelFileName);
     inline QMap<QString, Animation*> getAnimationMap() const {return animationsMap;};
     inline int getNbRows() const {return nbRows;};
     inline int getNbCols() const {return nbCols;};

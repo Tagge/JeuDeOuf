@@ -170,6 +170,12 @@ void Level::addAnimationFromJson(const QJsonObject &object)
     else if(entityName == "LuckyBlock"){
         QJsonArray lucky = object["lucky"].toArray();
         addAnimation(lucky, "lucky");
+        QJsonArray luckyUsed = object["lucky_used"].toArray();
+        addAnimation(luckyUsed, "lucky_used");
+    }
+    else if(entityName == "PowerUp"){
+        QJsonArray bolt = object["bolt"].toArray();
+        addAnimation(bolt, "bolt");
     }
 }
 

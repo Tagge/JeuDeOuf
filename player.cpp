@@ -74,12 +74,12 @@ void Player::update(Level * const level)
     move(level, limit);
 }
 
-void Player::collide(LivingEntity *e)
+void Player::collide(LivingEntity *e, Level * const l)
 {
-    e->collide(this);
+    e->collide(this, l);
 }
 
-void Player::collide(Roomba *r)
+void Player::collide(Roomba *r, Level * const l)
 {
     if(getIntangible() == 0) {
         QRectF roomba = r->getHitbox();
@@ -124,7 +124,7 @@ void Player::collide(Roomba *r)
     }
 }
 
-void Player::collide(LuckyBlock *lb)
+void Player::collide(LuckyBlock *lb, Level * const l)
 {
     QRectF pos = getHitbox();
     QRectF lucky = lb->getHitbox();
@@ -136,20 +136,12 @@ void Player::collide(LuckyBlock *lb)
     int botdir = abs(pos.top() - lucky.bottom());
     if(leftdir <= topdir && leftdir <= rightdir && leftdir <= botdir) {
         direction = 1;
-        qDebug() << "touched from left";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     } else if (topdir <= leftdir && topdir <= rightdir && topdir <= botdir){
         direction = 2;
-        qDebug() << "touched from top";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     } else if (rightdir <= leftdir && rightdir <= topdir && rightdir <= botdir) {
         direction = 3;
-        qDebug() << "touched from right";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     } else {
         direction = 4;
-        qDebug() << "touched from bot";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     }
 
     //Gauche
@@ -169,7 +161,7 @@ void Player::collide(LuckyBlock *lb)
     else {
         setPosTmp(getPosTmp().left(), lucky.bottom());
         setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
-        lb->dropItem();
+        lb->dropItem(l);
     }
     validatePos();
 

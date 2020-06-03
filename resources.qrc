@@ -21,5 +21,19 @@
         <file>sprites/character/Character_0005.png</file>
         <file>sprites/enemies/DeathRoomba.png</file>
         <file>levels/level_test.json</file>
+        <file>sprites/PowerBrick/PowerBrick_0000_Used.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0001_1.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0002_2.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0003_3.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0004_4.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0005_5.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0006_6.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0007_7.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0008_8.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0009_9.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0010_10.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0011_11.png</file>
+        <file>sprites/PowerBrick/PowerBrick_0012_12.png</file>
+        <file>sprites/Bolt.png</file>
     </qresource>
 </RCC>

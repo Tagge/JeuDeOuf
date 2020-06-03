@@ -31,6 +31,7 @@ public:
     inline void setYWindow(int value) {yWindow = value;};
     inline int getXWindow() const {return xWindow;};
     inline int getYWindow() const {return yWindow;};
+    inline void addLivingEntity(LivingEntity * le) {livingEntities.push_back(le);};
 
 private:
     QMap<QString, Animation*> animationsMap;

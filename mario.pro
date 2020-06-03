@@ -27,6 +27,7 @@ SOURCES += \
     main.cpp \
     gamewindow.cpp \
     player.cpp \
+    powerup.cpp \
     roomba.cpp \
     sprite.cpp \
     tile.cpp
@@ -43,6 +44,7 @@ HEADERS += \
     livingentity.h \
     luckyblock.h \
     player.h \
+    powerup.h \
     roomba.h \
     sprite.h \
     tile.h

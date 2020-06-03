@@ -39,7 +39,7 @@ void CalculateThread::doCalculations()
         mutex.lock();
         QVector<LivingEntity *> colliding = game->getLvl()->getEntity(idEntity)->getCollidingEntities(idEntity, game->getLvl());
         for(int i=0; i<colliding.size(); i++) {
-            game->getLvl()->getEntity(idEntity)->collide(colliding[i]);
+            game->getLvl()->getEntity(idEntity)->collide(colliding[i], game->getLvl());
         }
         mutex.unlock();
     }

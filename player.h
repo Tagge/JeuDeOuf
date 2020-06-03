@@ -3,7 +3,6 @@
 
 #include "level.h"
 #include "groundentity.h"
-#include "luckyblock.h"
 
 class Level;
 
@@ -14,12 +13,14 @@ public:
     Player();
     Player(int x, int y, const QMap<QString, Animation*> & animations);
     virtual void update(Level * const level);
-    virtual void collide(LivingEntity * e);
-    virtual void collide(Roomba * r);
-    virtual void collide(LuckyBlock * lb);
+    virtual void collide(LivingEntity * e, Level * const l);
+    virtual void collide(Roomba * r, Level * const l);
+    virtual void collide(LuckyBlock * lb, Level * const l);
+    virtual void collide(PowerUp * pu, Level * const l);
     void jump();
     void endTurn();
     void move(Level * const level, QRect limit);
+    void healthChanged();
 };
 
 #endif // PLAYER_H

@@ -14,6 +14,10 @@ class Level
 {
 public:
     Level();
+    Level(QString levelFileName);
+    void addAnimationFromJson(const QJsonObject & object);
+    void addAnimation(const QJsonArray & images, QString name);
+    void createEntityFromJson(QString name, int x, int y, const QJsonObject & param);
     inline QMap<QString, Animation*> getAnimationMap() const {return animationsMap;};
     inline int getNbRows() const {return nbRows;};
     inline int getNbCols() const {return nbCols;};
@@ -27,6 +31,9 @@ public:
     inline void setYWindow(int value) {yWindow = value;};
     inline int getXWindow() const {return xWindow;};
     inline int getYWindow() const {return yWindow;};
+    inline bool getWin() const {return win;};
+    inline void setWin(bool value) {win = value;};
+    inline void addLivingEntity(LivingEntity * le) {livingEntities.push_back(le);};
 
 private:
     QMap<QString, Animation*> animationsMap;
@@ -38,6 +45,7 @@ private:
     Player * player;
     int xWindow;
     int yWindow;
+    bool win = false;
 };
 
 #endif // LEVEL_H

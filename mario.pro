@@ -19,6 +19,7 @@ SOURCES += \
     animation.cpp \
     calculatethread.cpp \
     drawthread.cpp \
+    endgate.cpp \
     entity.cpp \
     groundentity.cpp \
     level.cpp \
@@ -27,7 +28,9 @@ SOURCES += \
     main.cpp \
     gamewindow.cpp \
     player.cpp \
+    powerup.cpp \
     roomba.cpp \
+    spawngate.cpp \
     sprite.cpp \
     tile.cpp
 
@@ -35,6 +38,7 @@ HEADERS += \
     animation.h \
     calculatethread.h \
     drawthread.h \
+    endgate.h \
     entity.h \
     gamewindow.h \
     groundentity.h \
@@ -43,7 +47,9 @@ HEADERS += \
     livingentity.h \
     luckyblock.h \
     player.h \
+    powerup.h \
     roomba.h \
+    spawngate.h \
     sprite.h \
     tile.h
 

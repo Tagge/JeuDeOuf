@@ -26,17 +26,20 @@ void CalculateThread::doCalculations()
 {
     QMutex mutex;
     int size = game->getLvl()->getNbEntities();
+    int xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
     for(int idEntity = 0; idEntity < size; idEntity++){
-        mutex.lock();
-        game->getLvl()->getEntity(idEntity)->update(game->getLvl());
-        QVector<LivingEntity *> colliding = game->getLvl()->getEntity(idEntity)->getCollidingEntities(idEntity, game->getLvl());
-        mutex.unlock();
+        int left = game->getLvl()->getEntity(idEntity)->getHitbox().left();
+        if(left >= xPlayer-(constants::TILE_WIDTH*10) && left <= xPlayer+(constants::TILE_WIDTH*10) && !game->getLvl()->getWin()){
+            mutex.lock();
+            game->getLvl()->getEntity(idEntity)->update(game->getLvl());
+            mutex.unlock();
+        }
     }
     for(int idEntity = 0; idEntity < size; idEntity++){
         mutex.lock();
         QVector<LivingEntity *> colliding = game->getLvl()->getEntity(idEntity)->getCollidingEntities(idEntity, game->getLvl());
         for(int i=0; i<colliding.size(); i++) {
-            game->getLvl()->getEntity(idEntity)->collide(colliding[i]);
+            game->getLvl()->getEntity(idEntity)->collide(colliding[i], game->getLvl());
         }
         mutex.unlock();
     }
@@ -45,7 +48,6 @@ void CalculateThread::doCalculations()
         game->getLvl()->getEntity(idEntity)->endTurn();
         mutex.unlock();
     }
-    int xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
     int halfWidth = game->getWidthOrigin()/2;
     int center = game->getLvl()->getXWindow()+halfWidth;
     if(xPlayer > center){

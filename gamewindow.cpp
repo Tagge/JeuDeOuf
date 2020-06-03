@@ -33,7 +33,9 @@ GameWindow::~GameWindow()
 void GameWindow::createGame()
 {
     ui->levelTest->hide();
-    lvl = new Level();
+    lvl = new Level(":/levels/level_test.json");
+    int yWindow = lvl->getYWindow();
+    lvl->setYWindow(yWindow-heightOrigin);
     inGame = 1;
     drawThread->start();
     QThread::msleep(5);

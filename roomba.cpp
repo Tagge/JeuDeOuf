@@ -3,6 +3,8 @@
 #include "math.h"
 #include "header.h"
 #include "player.h"
+#include "luckyblock.h"
+
 
 Roomba::Roomba():GroundEntity(0, 0)
 {
@@ -11,16 +13,15 @@ Roomba::Roomba():GroundEntity(0, 0)
 
 Roomba::Roomba(int x, int y, const QMap<QString, Animation *> &animations):GroundEntity(constants::TILE_HEIGHT*3.33, 0.3333)
 {
-    QRectF hitbox(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH*9/16, constants::TILE_HEIGHT);
-    QRectF posImage((x-3.0/16.0)*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH, constants::TILE_HEIGHT);
-    setImagePos(posImage);
+    QRectF hitbox(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH, constants::TILE_HEIGHT*11.0/16.0);
+    setImagePos(hitbox);
     setHitbox(hitbox);
     addAnimation(animations["roomba"]);
     addAnimation(animations["roomba_death"]);
     setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setJumpTime(0);
-    setFacingBack(false);
+    setFacingBack(true);
     setHealth(1);
     started = 0;
 }
@@ -32,13 +33,12 @@ void Roomba::update(Level * const level)
     } else {
         if(getHitbox().left() - level->getPlayer()->getHitbox().right() < 10*constants::TILE_WIDTH && started == 0) {
             if(getFacingBack()) {
-                setVectorX(-0.05*constants::TILE_WIDTH);
+                setVectorX(-0.025*constants::TILE_WIDTH);
             }
             else {
-                setVectorX(0.05*constants::TILE_WIDTH);
+                setVectorX(0.025*constants::TILE_WIDTH);
             }
         started = 1;
-        qDebug() << "started = " << started;
         }
     }
     if(onGround(level)){
@@ -48,19 +48,100 @@ void Roomba::update(Level * const level)
         fall();
     }
     if(getIntangible() > 0) {
-        setIntangible((getIntangible()+1)%constants::INTANGIBLE_FRAMES);
+        setIntangible((getIntangible()-1));
     }
     QRect limit(0, 0, level->getNbCols()*constants::TILE_WIDTH, level->getNbRows()*constants::TILE_HEIGHT);
     move(level, limit);
 }
 
-void Roomba::collide(LivingEntity *e)
+void Roomba::collide(LivingEntity *e, Level * const l)
 {
-    e->collide(this);
+    e->collide(this, l);
 }
 
-void Roomba::collide(Player *p)
+void Roomba::collide(Player *p, Level * const l)
 {
+}
+
+void Roomba::collide(LuckyBlock * lb, Level * const l)
+{
+    QRectF pos = getHitbox();
+    QRectF lucky = lb->getHitbox();
+    setPosTmp(pos.left(), pos.top());
+    int direction;
+    int leftdir = abs(pos.right() - lucky.left());
+    int topdir = abs(pos.bottom() - lucky.top());
+    int rightdir = abs(pos.left() - lucky.right());
+    int botdir = abs(pos.top() - lucky.bottom());
+    if(leftdir <= topdir && leftdir <= rightdir && leftdir <= botdir) {
+        direction = 1;
+        qDebug() << "touched from left by roomba";
+        qDebug() << leftdir << topdir << rightdir << botdir;
+    } else if (topdir <= leftdir && topdir <= rightdir && topdir <= botdir){
+        direction = 2;
+        qDebug() << "touched from top by roomba";
+        qDebug() << leftdir << topdir << rightdir << botdir;
+    } else if (rightdir <= leftdir && rightdir <= topdir && rightdir <= botdir) {
+        direction = 3;
+        qDebug() << "touched from right by roomba";
+        qDebug() << leftdir << topdir << rightdir << botdir;
+    } else {
+        direction = 4;
+        qDebug() << "touched from bot by roomba";
+        qDebug() << leftdir << topdir << rightdir << botdir;
+    }
+
+    //Gauche
+    if(direction == 1) {
+        setPosTmp(lucky.left()-getHitbox().width(),getPosTmp().top());
+        setVectorX(-getVectorX());
+        setFacingBack(!getFacingBack());
+        if(getHealth() == 0) {
+            lb->dropItem(l);
+        }
+    }
+    //Haut
+    else if (direction == 2) {
+        setPosTmp(getPosTmp().left(), lucky.top()-getHitbox().height());
+        setOnSolid(true);
+    }
+    //Droite
+    else if (direction == 3) {
+        setPosTmp(lucky.right(), getPosTmp().top());
+        setVectorX(-getVectorX());
+        setFacingBack(!getFacingBack());
+        if(getHealth() == 0) {
+            lb->dropItem(l);
+        }
+    }
+    //Bas
+    else {
+        setPosTmp(getPosTmp().left(), lucky.bottom());
+        setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
+    }
+    validatePos();
+}
+
+void Roomba::collide(Roomba *r, Level * const l)
+{
+    if(getIntangible() == 0 && r->getIntangible() == 0) {
+        if(getHealth() == r->getHealth()) {
+            setVectorX(-getVectorX());
+            setIntangible(5);
+            setFacingBack(!getFacingBack());
+            r->setVectorX(-r->getVectorX());
+            r->setIntangible(5);
+            r->setFacingBack(!r->getFacingBack());
+        } else if(getHealth() > r->getHealth()) {
+            setHealth(-1);
+            setVectorX(0);
+            setIntangible(3600);
+        } else {
+            r->setHealth(-1);
+            r->setVectorX(0);
+            r->setIntangible(3600);
+        }
+    }
 }
 
 void Roomba::endTurn()
@@ -110,21 +191,3 @@ void Roomba::move(Level * const level, QRect limit)
     }
     validatePos();
 }
-
-
-/*
-void Roomba::jump()
-{
-    double y = getVectorY();
-    double t_1 = (getJumpTime()-1) / constants::FPS_CALCULATION;
-    double t = getJumpTime() / constants::FPS_CALCULATION;
-    double g = getG();
-    if(t > getJumpTop()){
-        g = getGFast();
-    }
-    double posT = 0.5*g*pow(t, 2)+getV0()*t;
-    double posT_1 = 0.5*g*pow(t_1, 2)+getV0()*t_1;
-    setVectorY(y-(posT-posT_1));
-    setJumpTime(getJumpTime()+1);
-}
-*/

@@ -8,7 +8,7 @@ LuckyBlock::LuckyBlock()
 
 LuckyBlock::LuckyBlock(int x, int y, const QMap<QString, Animation *> &animations, int obj)
 {
-    QRectF hitbox(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH*8/16, constants::TILE_HEIGHT);
+    QRectF hitbox(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH, constants::TILE_HEIGHT);
     QRectF posImage(x*constants::TILE_WIDTH, y*constants::TILE_HEIGHT, constants::TILE_WIDTH, constants::TILE_HEIGHT);
     setImagePos(posImage);
     setHitbox(hitbox);

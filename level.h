@@ -31,6 +31,8 @@ public:
     inline void setYWindow(int value) {yWindow = value;};
     inline int getXWindow() const {return xWindow;};
     inline int getYWindow() const {return yWindow;};
+    inline bool getWin() const {return win;};
+    inline void setWin(bool value) {win = value;};
     inline void addLivingEntity(LivingEntity * le) {livingEntities.push_back(le);};
 
 private:
@@ -43,6 +45,7 @@ private:
     Player * player;
     int xWindow;
     int yWindow;
+    bool win = false;
 };
 
 #endif // LEVEL_H

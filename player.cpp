@@ -67,7 +67,7 @@ void Player::update(Level * const level)
         setAnimPos(2);
         jump();
     }
-    else if(getFallingTime() >  0){
+    else if(getFallingTime() > 0){
         fall();
     }
     QRect limit(level->getXWindow(), 0, level->getNbCols()*constants::TILE_WIDTH-level->getXWindow(), level->getNbRows()*constants::TILE_HEIGHT);

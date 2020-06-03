@@ -8,6 +8,7 @@ class Player;
 class Roomba;
 class LuckyBlock;
 class PowerUp;
+class EndGate;
 class Level;
 
 class LivingEntity: public Entity
@@ -44,6 +45,7 @@ public:
     inline virtual void collide(Roomba * r, Level * const l) {};
     inline virtual void collide(LuckyBlock * lb, Level * const l) {};
     inline virtual void collide(PowerUp * pu, Level * const l) {};
+    virtual void collide(EndGate * eg, Level * const l) {};
     double getHealth() const;
     void setHealth(double value);
     int getIntangible() const;

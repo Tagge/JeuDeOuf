@@ -12,9 +12,10 @@ public:
     EndGate();
     EndGate(int x, int y, const QMap<QString, Animation*> & animations);
     virtual void update(Level * const level);
-    virtual void collide(LivingEntity * e);
-    virtual void collide(Roomba * r);
-    virtual void collide(Player * p);
+    virtual void collide(LivingEntity * e, Level * const l);
+    virtual void collide(Player * p, Level * l);
+    void move(Level * const level, QRect limit);
+    void endTurn();
 };
 
 #endif // ENDGATE_H

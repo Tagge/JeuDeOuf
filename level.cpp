@@ -3,6 +3,7 @@
 #include "roomba.h"
 #include "luckyblock.h"
 #include "header.h"
+#include "endgate.h"
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
@@ -182,6 +183,10 @@ void Level::addAnimationFromJson(const QJsonObject &object)
         QJsonArray bolt = object["bolt"].toArray();
         addAnimation(bolt, "bolt");
     }
+    else if(entityName == "EndGate"){
+        QJsonArray endGate = object["end_gate"].toArray();
+        addAnimation(endGate, "end_gate");
+    }
 }
 
 void Level::addAnimation(const QJsonArray &images, QString name)
@@ -206,5 +211,8 @@ void Level::createEntityFromJson(QString name, int x, int y, const QJsonObject &
     }
     else if(name == "LuckyBlock"){
         livingEntities.push_back(new LuckyBlock(x, y, animationsMap, param["object"].toInt()));
+    }
+    else if(name == "EndGate"){
+        livingEntities.push_back(new EndGate(x, y, animationsMap));
     }
 }

@@ -35,4 +35,10 @@ void Entity::addAnimation(Animation *value)
     animations.push_back(value);
 }
 
+void Entity::setImagePos(QRectF value)
+{
+    //value.setLeft(value.left()-relativePosImage);
+    imagePos = value;
+}
+
 

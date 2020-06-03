@@ -15,12 +15,12 @@ public:
     LuckyBlock();
     LuckyBlock(int x, int y, const QMap<QString, Animation*> & animations, int obj);
     virtual void update(Level * const level);
-    virtual void collide(LivingEntity * e);
-    virtual void collide(Roomba * r);
-    virtual void collide(Player * p);
+    virtual void collide(LivingEntity * e, Level * const l);
+    virtual void collide(Roomba * r, Level * const l);
+    virtual void collide(Player * p, Level * const l);
     void endTurn();
     void move(Level * const level, QRect limit);
-    void dropItem();
+    void dropItem(Level * l);
 };
 
 #endif // LUCKYBLOCK_H

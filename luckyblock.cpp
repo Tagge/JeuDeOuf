@@ -2,6 +2,7 @@
 #include "header.h"
 #include "roomba.h"
 #include "player.h"
+#include "powerup.h"
 #include <QDebug>
 
 
@@ -17,6 +18,7 @@ LuckyBlock::LuckyBlock(int x, int y, const QMap<QString, Animation *> &animation
     setImagePos(posImage);
     setHitbox(hitbox);
     addAnimation(animations["lucky"]);
+    addAnimation(animations["lucky_used"]);
     setHealth(1);
     objContained = obj;
 }
@@ -28,6 +30,7 @@ void LuckyBlock::update(Level * const level)
     }
     if(activatedFor == 10) {
         setVectorY(0);
+        setAnimPos(1);
     }
     if(activatedFor>0 && activatedFor<10) {
         activatedFor++;
@@ -36,17 +39,17 @@ void LuckyBlock::update(Level * const level)
     move(level, limit);
 }
 
-void LuckyBlock::collide(LivingEntity *e)
+void LuckyBlock::collide(LivingEntity *e, Level * const l)
 {
-    e->collide(this);
+    e->collide(this, l);
 }
 
-void LuckyBlock::collide(Roomba *r)
+void LuckyBlock::collide(Roomba *r, Level * const l)
 {
 
 }
 
-void LuckyBlock::collide(Player *p)
+void LuckyBlock::collide(Player *p, Level * const l)
 {
 
 }
@@ -63,11 +66,15 @@ void LuckyBlock::move(Level * const level, QRect limit)
     validatePos();
 }
 
-void LuckyBlock::dropItem()
+void LuckyBlock::dropItem(Level * l)
 {
     if(getHealth()>0) {
         setVectorY(-0.05*constants::TILE_HEIGHT);
         activatedFor=1;
         setHealth(0);
+        if(objContained == 1) {
+            PowerUp * pu = new PowerUp(getHitbox().left() + constants::TILE_WIDTH/4, getHitbox().top()-constants::TILE_HEIGHT/2, l->getAnimationMap()["bolt"]);
+            l->addLivingEntity(pu);
+        }
     }
 }

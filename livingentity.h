@@ -7,6 +7,7 @@
 class Player;
 class Roomba;
 class LuckyBlock;
+class PowerUp;
 class Level;
 
 class LivingEntity: public Entity
@@ -38,10 +39,11 @@ public:
     inline double getAccel() {return acceleration;};
     inline void setMaxSpeed(double value) {maxSpeed = value;};
     inline void setAccel(double value) {acceleration = value;};
-    inline virtual void collide(LivingEntity * e) {};
-    inline virtual void collide(Player * p) {};
-    inline virtual void collide(Roomba * r) {};
-    inline virtual void collide(LuckyBlock * lb) {};
+    inline virtual void collide(LivingEntity * e, Level * const l) {};
+    inline virtual void collide(Player * p, Level * const l) {};
+    inline virtual void collide(Roomba * r, Level * const l) {};
+    inline virtual void collide(LuckyBlock * lb, Level * const l) {};
+    inline virtual void collide(PowerUp * pu, Level * const l) {};
     double getHealth() const;
     void setHealth(double value);
     int getIntangible() const;

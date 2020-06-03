@@ -29,7 +29,7 @@ void CalculateThread::doCalculations()
     int xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
     for(int idEntity = 0; idEntity < size; idEntity++){
         int left = game->getLvl()->getEntity(idEntity)->getHitbox().left();
-        if(left >= xPlayer-(constants::TILE_WIDTH*10) && left <= xPlayer+(constants::TILE_WIDTH*10)){
+        if(left >= xPlayer-(constants::TILE_WIDTH*10) && left <= xPlayer+(constants::TILE_WIDTH*10) && !game->getLvl()->getWin()){
             mutex.lock();
             game->getLvl()->getEntity(idEntity)->update(game->getLvl());
             mutex.unlock();

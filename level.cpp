@@ -3,6 +3,8 @@
 #include "roomba.h"
 #include "luckyblock.h"
 #include "header.h"
+#include "endgate.h"
+#include "spawngate.h"
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
@@ -92,10 +94,10 @@ Level::Level(QString levelFileName)
         dataJson = levelFile.readAll();
         levelJson = levelJson.fromJson(dataJson);
         level = levelJson.object();
-        xWindow = level["start_x"].toInt();
-        yWindow = level["start_y"].toInt();
         nbRows = level["rows"].toInt();
         nbCols = level["columns"].toInt();
+        xWindow = level["start_x"].toInt()*constants::TILE_WIDTH;
+        yWindow = (nbRows-level["start_y"].toInt())*constants::TILE_HEIGHT;
         for(int row = 0; row < nbRows; row++){
             map.push_back(QVector<Tile*>(nbCols));
         }
@@ -122,11 +124,13 @@ Level::Level(QString levelFileName)
             }
         }
         QMap<int, QString> mapEntities;
+        QMap<int, QJsonObject> mapParameters;
         QJsonArray entitiesData = level["entities"].toArray();
         int nbEntityTypes = entitiesData.size();
         for(int entityId = 0; entityId < nbEntityTypes; entityId++){
             QJsonObject entityData = entitiesData[entityId].toObject();
             mapEntities.insert(entityData["id"].toInt(), entityData["type"].toString());
+            mapParameters.insert(entityData["id"].toInt(), entityData["parameters"].toObject());
             addAnimationFromJson(entityData);
         }
         QJsonArray mapEntitiesJson = level["entities_map"].toArray();
@@ -135,13 +139,16 @@ Level::Level(QString levelFileName)
             for(int col = 0; col < nbCols; col++){
                 int idEntity = entitiesRow[col].toInt();
                 if(idEntity > 0){
-                    createEntityFromJson(mapEntities[idEntity], col, row);
+                    if(!mapParameters[idEntity].isEmpty()){
+                        qDebug() << "no param";
+                    }
+                    createEntityFromJson(mapEntities[idEntity], col, row, mapParameters[idEntity]);
                 }
             }
         }
         QJsonObject player = level["player"].toObject();
         addAnimationFromJson(player);
-        createEntityFromJson("Player", player["x"].toInt(), player["y"].toInt());
+        createEntityFromJson("Player", player["x"].toInt(), player["y"].toInt(), QJsonObject());
     }
     else{
         qDebug() << "File not found";
@@ -183,6 +190,14 @@ void Level::addAnimationFromJson(const QJsonObject &object)
         QJsonArray bolt = object["bolt"].toArray();
         addAnimation(bolt, "bolt");
     }
+    else if(entityName == "EndGate"){
+        QJsonArray endGate = object["end_gate"].toArray();
+        addAnimation(endGate, "end_gate");
+    }
+    else if(entityName == "SpawnGate"){
+        QJsonArray endGate = object["spawn_gate"].toArray();
+        addAnimation(endGate, "spawn_gate");
+    }
 }
 
 void Level::addAnimation(const QJsonArray &images, QString name)
@@ -196,7 +211,7 @@ void Level::addAnimation(const QJsonArray &images, QString name)
     animationsMap.insert(name, animation);
 }
 
-void Level::createEntityFromJson(QString name, int x, int y)
+void Level::createEntityFromJson(QString name, int x, int y, const QJsonObject & param)
 {
     if(name == "Roomba"){
         livingEntities.push_back(new Roomba(x, y, animationsMap));
@@ -206,6 +221,12 @@ void Level::createEntityFromJson(QString name, int x, int y)
         livingEntities.push_back(player);
     }
     else if(name == "LuckyBlock"){
-        livingEntities.push_back(new LuckyBlock(x, y, animationsMap, 1));
+        livingEntities.push_back(new LuckyBlock(x, y, animationsMap, param["object"].toInt()));
+    }
+    else if(name == "EndGate"){
+        livingEntities.push_back(new EndGate(x, y, animationsMap));
+    }
+    else if(name == "SpawnGate"){
+        livingEntities.push_back(new SpawnGate(x, y, animationsMap));
     }
 }

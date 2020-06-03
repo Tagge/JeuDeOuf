@@ -21,6 +21,16 @@
         <file>sprites/character/Character_0005.png</file>
         <file>sprites/enemies/DeathRoomba.png</file>
         <file>levels/level_test.json</file>
+        <file>sprites/Checkpoint.png</file>
+        <file>sprites/CheckpointGreen.png</file>
+        <file>sprites/finish/BHSpawn_0000_Calque-1.png</file>
+        <file>sprites/finish/BHSpawn_0001_Calque-2.png</file>
+        <file>sprites/finish/BHSpawn_0002_Calque-3.png</file>
+        <file>sprites/finish/BHSpawn_0003_Calque-4.png</file>
+        <file>sprites/finish/BlackHole_0000_Calque-3.png</file>
+        <file>sprites/finish/BlackHole_0001_Calque-2.png</file>
+        <file>sprites/finish/BlackHole_0002_Calque-1.png</file>
+        <file>sprites/finish/BlackHole_0003_Calque-4.png</file>
         <file>sprites/PowerBrick/PowerBrick_0000_Used.png</file>
         <file>sprites/PowerBrick/PowerBrick_0001_1.png</file>
         <file>sprites/PowerBrick/PowerBrick_0002_2.png</file>

@@ -20,6 +20,7 @@ SOURCES += \
     brick.cpp \
     buzzer.cpp \
     calculatethread.cpp \
+    checkpoint.cpp \
     drawthread.cpp \
     endgate.cpp \
     entity.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     brick.h \
     buzzer.h \
     calculatethread.h \
+    checkpoint.h \
     drawthread.h \
     endgate.h \
     entity.h \

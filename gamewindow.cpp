@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QKeyEvent>
+#include "checkpoint.h"
 
 GameWindow::GameWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -64,8 +65,9 @@ void GameWindow::paintEvent(QPaintEvent *e)
             mutex.try_lock();
             LevelTimer * timer = lvl->getTimer();
             int livesLeft = lvl->getPlayer()->getLivesLeft();
+            bool checkpoint = lvl->getCheckpoint()->isChecked();
             delete(lvl);
-            lvl = new Level(getLevelPath(), livesLeft, timer);
+            lvl = new Level(getLevelPath(), livesLeft, timer, checkpoint);
             timer->setLvl(lvl);
             int yWindow = lvl->getYWindow();
             lvl->setYWindow(yWindow-getHeightOrigin());
@@ -94,6 +96,20 @@ void GameWindow::paintEvent(QPaintEvent *e)
                 overCount++;
                 return;
             } else {
+                delete(lvl);
+                inGame = false;
+                overCount = 0;
+                return;
+            }
+        }
+        if(lvl->getWin()) {
+            if(overCount < 300) {
+                Text gg("GG", (widthOrigin/3)*ratioWidth, (heightOrigin/2)*ratioHeight, 40, "Super Mario 256", "red");
+                painter.drawPixmap(gg.getX(), gg.getY(), gg.getWidth()*ratioWidth, gg.getHeight()*ratioHeight, gg.getImage());
+                overCount++;
+                return;
+            } else {
+                delete(lvl);
                 inGame = false;
                 overCount = 0;
                 return;
@@ -130,7 +146,6 @@ void GameWindow::paintEvent(QPaintEvent *e)
         ui->levelTest->show();
         QPixmap pix(":/sprites/bg_menu");
         int y = heightOrigin-135*constants::TILE_HEIGHT/16.0;
-        qDebug() << y;
         painter.drawPixmap(0, y, 240*constants::TILE_WIDTH/16.0, 135*constants::TILE_HEIGHT/16.0, pix);
     }
 }

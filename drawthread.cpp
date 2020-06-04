@@ -22,8 +22,6 @@ void DrawThread::run()
 
 void DrawThread::doDraw()
 {
-    qDebug() << "drawDebut";
     QMutex mutex;
     game->repaint();
-    qDebug() << "drawFin";
 }

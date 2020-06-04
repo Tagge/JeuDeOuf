@@ -49,5 +49,10 @@
         <file>sprites/Platformx2.png</file>
         <file>sprites/Platformx3.png</file>
         <file>sprites/Brick.png</file>
+        <file>sprites/enemies/Buzzer_0.png</file>
+        <file>sprites/enemies/Buzzer_1.png</file>
+        <file>sprites/enemies/Buzzer_2.png</file>
+        <file>sprites/enemies/Buzzer_3.png</file>
+        <file>sprites/enemies/DeathBuzzer.png</file>
     </qresource>
 </RCC>

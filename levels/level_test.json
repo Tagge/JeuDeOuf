@@ -99,6 +99,18 @@
       "type" : "Brick",
       "id" : 7,
       "brick" : ["sprites/Brick"]
+    },
+    {
+      "type" : "Buzzer",
+      "id" : 8,
+      "buzzer" : ["sprites/enemies/Buzzer_0", "sprites/enemies/Buzzer_1", "sprites/enemies/Buzzer_2", "sprites/enemies/Buzzer_3"],
+      "buzzer_death" : ["sprites/enemies/DeathBuzzer"],
+      "parameters" : {
+        "x_start" : [16],
+        "y_start" : [6],
+        "x_end" : [20],
+        "y_end" : [6]
+      }
     }
   ],
   "player" : {

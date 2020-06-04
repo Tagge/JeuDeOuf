@@ -8,6 +8,7 @@
 #include "leveltimer.h"
 #include "movingplatform.h"
 #include "brick.h"
+#include "buzzer.h"
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
@@ -267,6 +268,21 @@ void Level::addAnimationFromJson(const QJsonObject &object)
     else if(entityName == "Brick"){
         QJsonArray brick = object["brick"].toArray();
         addAnimation(brick, "brick");
+    }
+    else if(entityName == "Buzzer"){
+        QJsonArray buzzer = object["buzzer"].toArray();
+        addAnimation(buzzer, "buzzer");
+        QJsonArray buzzer_death = object["buzzer_death"].toArray();
+        addAnimation(buzzer_death, "buzzer_death");
+        QJsonObject params = object["parameters"].toObject();
+        QJsonArray xStarts = params["x_start"].toArray();
+        QJsonArray yStarts = params["y_start"].toArray();
+        QJsonArray xEnds = params["x_end"].toArray();
+        QJsonArray yEnds = params["y_end"].toArray();
+        int nbPlatforms = xStarts.size();
+        for(int platform = 0; platform < nbPlatforms; platform++){
+            livingEntities.push_back(new Buzzer(xStarts[platform].toInt(), yStarts[platform].toInt(), xEnds[platform].toInt(), yEnds[platform].toInt(), animationsMap));
+        }
     }
 }
 

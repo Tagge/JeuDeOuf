@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     animation.cpp \
     brick.cpp \
+    buzzer.cpp \
     calculatethread.cpp \
     drawthread.cpp \
     endgate.cpp \
@@ -42,6 +43,7 @@ SOURCES += \
 HEADERS += \
     animation.h \
     brick.h \
+    buzzer.h \
     calculatethread.h \
     drawthread.h \
     endgate.h \

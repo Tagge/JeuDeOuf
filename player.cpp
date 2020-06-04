@@ -7,6 +7,7 @@
 #include "powerup.h"
 #include "movingplatform.h"
 #include "brick.h"
+#include "buzzer.h"
 #include <stdlib.h>
 
 Player::Player():GroundEntity(0, 0)
@@ -30,7 +31,7 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
     setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setJumpTime(0);
-    livesLeft = 60;
+    livesLeft = 3;
 }
 
 void Player::update(Level * const level)
@@ -106,7 +107,7 @@ void Player::collide(Roomba *r, Level * const l)
         QRectF roomba = r->getHitbox();
         QRectF player = getHitbox();
         if(r->getHealth()>0) {
-            if(player.bottom() < roomba.bottom()) {
+            if(player.bottom() < (roomba.bottom()+roomba.top())/2) {
                 r->setHealth(r->getHealth()-1);
                 r->setVectorX(0);
                 setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
@@ -114,13 +115,13 @@ void Player::collide(Roomba *r, Level * const l)
             }
             else {
                 setHealth(getHealth()-1);
-                setIntangible(constants::FPS_CALCULATION/2);
+                setIntangible(constants::FPS_CALCULATION);
                 healthChanged();
             }
         } else {
             if(r->getIntangible() == 0) {
                 if(r->getVectorX() == 0) {
-                    if(player.bottom() < roomba.bottom()) {
+                    if(player.bottom() < (roomba.bottom()+roomba.top())/2) {
                         setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
                     }
                     if((player.left()+player.right())/2 < (roomba.left()+roomba.right())/2) {
@@ -137,7 +138,7 @@ void Player::collide(Roomba *r, Level * const l)
                     }
                     else {
                         setHealth(getHealth()-1);
-                        setIntangible(constants::FPS_CALCULATION/2);
+                        setIntangible(constants::FPS_CALCULATION);
                         healthChanged();
                     }
                 }
@@ -188,7 +189,6 @@ void Player::collide(LuckyBlock *lb, Level * const l)
         }
     }
     validatePos();
-
 }
 
 void Player::collide(PowerUp * pu, Level * const l)
@@ -259,6 +259,23 @@ void Player::collide(Brick * b, Level * const l)
 
     }
     validatePos();
+}
+
+void Player::collide(Buzzer *bu, Level * const l)
+{
+    if(bu->getHealth() >= 0 && getIntangible() == 0) {
+        if((bu->getHitbox().bottom()+bu->getHitbox().top())/2 > getHitbox().bottom() && getVectorY() >= 0) {
+            bu->setHealth(bu->getHealth()-1);
+            bu->setVectorX(0);
+            bu->setVectorY(0);
+            setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
+        }
+        else {
+            setHealth(getHealth()-1);
+            healthChanged();
+            setIntangible(constants::FPS_CALCULATION);
+        }
+    }
 }
 
 

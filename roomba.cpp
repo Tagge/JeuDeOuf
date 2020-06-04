@@ -119,10 +119,10 @@ void Roomba::collide(Roomba *r, Level * const l)
     if(getIntangible() == 0 && r->getIntangible() == 0 && getHealth() >= 0 && r->getHealth() >= 0) {
         if(getHealth() == r->getHealth()) {
             setVectorX(-getVectorX());
-            setIntangible(5);
+            setIntangible(constants::FPS_CALCULATION/6);
             setFacingBack(!getFacingBack());
             r->setVectorX(-r->getVectorX());
-            r->setIntangible(5);
+            r->setIntangible(constants::FPS_CALCULATION/6);
             r->setFacingBack(!r->getFacingBack());
         } else if(getHealth() > r->getHealth()) {
             if(r->getVectorX() != 0) {
@@ -130,7 +130,7 @@ void Roomba::collide(Roomba *r, Level * const l)
                 setVectorX(0);
             } else {
                 setVectorX(-getVectorX());
-                setIntangible(5);
+                setIntangible(constants::FPS_CALCULATION/6);
                 setFacingBack(!getFacingBack());
             }
         } else {
@@ -140,7 +140,7 @@ void Roomba::collide(Roomba *r, Level * const l)
             }
             else {
                 r->setVectorX(-r->getVectorX());
-                r->setIntangible(5);
+                r->setIntangible(constants::FPS_CALCULATION/6);
                 r->setFacingBack(!r->getFacingBack());
             }
         }

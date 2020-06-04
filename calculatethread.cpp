@@ -24,11 +24,28 @@ void CalculateThread::run()
 
 void CalculateThread::doCalculations()
 {
+    QMutex mutex;
     if(game->getLvl()->getTerminate()) {
         return;
     }
-    QMutex mutex;
+    if(game->getLvl()->getPlayer()->getIsDead()){
+        mutex.lock();
+        game->getLvl()->setTerminate(true);
+        mutex.unlock();
+        return;
+    }
     int size = game->getLvl()->getNbEntities();
+    for(int idEntity = 0; idEntity < size; idEntity++){
+        int left = game->getLvl()->getEntity(idEntity)->getHitbox().left();
+        if(game->getLvl()->getEntity(idEntity)->getIsDead()){
+            mutex.lock();
+            delete game->getLvl()->getEntity(idEntity);
+            game->getLvl()->removeEntity(idEntity);
+            idEntity--;
+            size--;
+            mutex.unlock();
+        }
+    }
     int xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
     for(int idEntity = 0; idEntity < size; idEntity++){
         int left = game->getLvl()->getEntity(idEntity)->getHitbox().left();
@@ -44,6 +61,7 @@ void CalculateThread::doCalculations()
         for(int i=0; i<colliding.size(); i++) {
             game->getLvl()->getEntity(idEntity)->collide(colliding[i], game->getLvl());
         }
+        game->getLvl()->getEntity(idEntity)->deathTimer();
         mutex.unlock();
     }
     for(int idEntity = 0; idEntity < size; idEntity++){
@@ -54,7 +72,6 @@ void CalculateThread::doCalculations()
     int halfWidth = game->getWidthOrigin()/2;
     int center = game->getLvl()->getXWindow()+halfWidth;
     xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
-
     if(xPlayer > center){
         mutex.lock();
         game->getLvl()->setXWindow(xPlayer-halfWidth);

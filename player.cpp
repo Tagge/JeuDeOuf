@@ -35,21 +35,19 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
 
 void Player::update(Level * const level)
 {
-    if(getHealth() == -1) {
-        setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            qDebug("Game over");
-            //doSomethingToEndTheGame
-        }
-        level->setTerminate(true);
+    if(getHealth() < 0){
         return;
     }
-    if(getFallingTime() > 100 && getHealth() >= 0) {
+    if(getFallingTime() > 100 && getHealth() == 0) {
+        level->setXWindow(0);
         setLivesLeft(getLivesLeft()-1);
         if(getLivesLeft() == 0) {
             qDebug("Game over");
             //doSomethingToEndTheGame
         }
+        setPosTmp(96, 480);
+        setHealth(0);
+        validatePos();
         level->setTerminate(true);
         return;
     }
@@ -59,6 +57,7 @@ void Player::update(Level * const level)
     if(onGround(level)){
         setJumpTime(0);
     }
+    setAnimPos(getHealth()*3);
     if(getIntangible() > 0) {
         setIntangible((getIntangible()-1));
     }
@@ -292,7 +291,6 @@ void Player::move(Level * const level, QRect limit)
     QRectF pos = getHitbox();
     setPosTmp(pos.left()+(int)getVectorX(), pos.top());
     if(getPosTmp().left() < limit.left()){
-        //qDebug() << getPosTmp().left() << " " << limit.left();
         setPosTmp(limit.left(), getPosTmp().top());
     }
     if(getPosTmp().right() > limit.right()){
@@ -339,4 +337,16 @@ void Player::healthChanged()
         setHitbox(hitbox);
     }
 
+}
+
+void Player::deathTimer()
+{
+    if(getHealth() < 0){
+        setAnimPos(6);
+        setHealth(getHealth()-1);
+    }
+    if(getHealth() == -constants::FPS_CALCULATION/2){
+        setLivesLeft(getLivesLeft()-1);
+        setIsDead(true);
+    }
 }

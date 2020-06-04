@@ -18,7 +18,7 @@
 
 //Mock level
 Level::Level()
-{   
+{
     int nbPix = 10;
     nbRows = 10;
     nbCols = 100;
@@ -159,7 +159,10 @@ Level::Level(QString levelFileName)
         for(int row = 0; row < nbRows; row++){
             QJsonArray tilesRow = mapJson[row].toArray();
             for(int col = 0; col < nbCols; col++){
-                QString idTile = tilesRow[col].toString();
+                QString idTile = "0";
+                if(tilesRow[col].isString()){
+                    idTile = tilesRow[col].toString();
+                }
                 map[row][col] = new Tile(isWall[idTile], col, row, animationsMap[idTile]);
             }
         }
@@ -173,15 +176,15 @@ Level::Level(QString levelFileName)
             mapParameters.insert(entityData["id"].toInt(), entityData["parameters"].toObject());
             addAnimationFromJson(entityData);
         }
-        QJsonArray mapEntitiesJson = level["entities_map"].toArray();
+        //QJsonArray mapEntitiesJson = level["entities_map"].toArray();
         for(int row = 0; row < nbRows; row++){
-            QJsonArray entitiesRow = mapEntitiesJson[row].toArray();
+            QJsonArray entitiesRow = mapJson[row].toArray();
             for(int col = 0; col < nbCols; col++){
-                int idEntity = entitiesRow[col].toInt();
+                int idEntity = 0;
+                if(entitiesRow[col].isDouble()){
+                    idEntity = entitiesRow[col].toInt();
+                }
                 if(idEntity > 0){
-                    if(!mapParameters[idEntity].isEmpty()){
-                        qDebug() << "no param";
-                    }
                     createEntityFromJson(mapEntities[idEntity], col, row, mapParameters[idEntity]);
                 }
             }
@@ -253,9 +256,19 @@ void Level::addAnimationFromJson(const QJsonObject &object)
     }
     else if(entityName == "Platform"){
         QJsonArray platform2 = object["platform2"].toArray();
-        addAnimation(platform2, "spawn_gate");
+        addAnimation(platform2, "platform2");
         QJsonArray platform3 = object["platform3"].toArray();
-        addAnimation(platform3, "spawn_gate");
+        addAnimation(platform3, "platform3");
+        QJsonObject params = object["parameters"].toObject();
+        QJsonArray xStarts = params["x_start"].toArray();
+        QJsonArray yStarts = params["y_start"].toArray();
+        QJsonArray xEnds = params["x_end"].toArray();
+        QJsonArray yEnds = params["y_end"].toArray();
+        QJsonArray sizes = params["size"].toArray();
+        int nbPlatforms = xStarts.size();
+        for(int platform = 0; platform < nbPlatforms; platform++){
+            livingEntities.push_back(new Roomba(platform, 4, animationsMap));
+        }
     }
     else if(entityName == "Brick"){
         QJsonArray brick = object["brick"].toArray();

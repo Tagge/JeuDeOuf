@@ -1,4 +1,6 @@
 #include "leveltimer.h"
+#include <QTimer>
+#include <QDebug>
 
 LevelTimer::LevelTimer()
 {
@@ -14,5 +16,7 @@ void LevelTimer::run() {
 }
 
 void LevelTimer::triggerEnd() {
+    qDebug()  << "timer1";
     ourLvl->setTimeElapsed(true);
+    qDebug()  << "timer2";
 }

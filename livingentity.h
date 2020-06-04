@@ -10,6 +10,7 @@ class LuckyBlock;
 class PowerUp;
 class EndGate;
 class MovingPlatform;
+class Brick;
 class Level;
 
 class LivingEntity: public Entity
@@ -48,6 +49,7 @@ public:
     inline virtual void collide(PowerUp * pu, Level * const l) {};
     inline virtual void collide(MovingPlatform * mp, Level * const l) {};
     inline virtual void collide(EndGate * eg, Level * const l) {};
+    inline virtual void collide(Brick * b, Level * const l) {};
     double getHealth() const;
     void setHealth(double value);
     int getIntangible() const;

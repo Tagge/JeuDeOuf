@@ -19,6 +19,7 @@ public:
     virtual void collide(LuckyBlock * lb, Level * const l);
     virtual void collide(PowerUp * pu, Level * const l);
     virtual void collide(MovingPlatform * mp, Level * const l);
+    virtual void collide(Brick * b, Level * const l);
     void jump();
     void endTurn();
     void move(Level * const level, QRect limit);

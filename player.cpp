@@ -6,6 +6,7 @@
 #include "luckyblock.h"
 #include "powerup.h"
 #include "movingplatform.h"
+#include "brick.h"
 #include <stdlib.h>
 
 Player::Player():GroundEntity(0, 0)
@@ -212,6 +213,52 @@ void Player::collide(MovingPlatform *mp, Level * const l)
         setOnSolid(true);
         validatePos();
     }
+}
+
+void Player::collide(Brick * b, Level * const l)
+{
+    QRectF pos = getHitbox();
+    QRectF brick = b->getHitbox();
+    setPosTmp(pos.left(), pos.top());
+    int direction;
+    int leftdir = abs(pos.right() - brick.left());
+    int topdir = abs(pos.bottom() - brick.top());
+    int rightdir = abs(pos.left() - brick.right());
+    int botdir = abs(pos.top() - brick.bottom());
+    if(leftdir <= topdir && leftdir <= rightdir && leftdir <= botdir) {
+        direction = 1;
+    } else if (topdir <= leftdir && topdir <= rightdir && topdir <= botdir){
+        direction = 2;
+    } else if (rightdir <= leftdir && rightdir <= topdir && rightdir <= botdir) {
+        direction = 3;
+    } else {
+        direction = 4;
+    }
+
+    //Gauche
+    if(direction == 1) {
+        setPosTmp(brick.left()-getHitbox().width(),getPosTmp().top());
+    }
+    //Haut
+    else if (direction == 2) {
+        setPosTmp(getPosTmp().left(), brick.top()-getHitbox().height());
+        setOnSolid(true);
+    }
+    //Droite
+    else if (direction == 3) {
+        setPosTmp(brick.right(), getPosTmp().top());
+    }
+    //Bas
+    else {
+        setPosTmp(getPosTmp().left(), brick.bottom());
+        setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
+        if(getHealth() > 0) {
+            b->setHealth(-1);
+        } else {
+            b->jump();
+        }
+    }
+    validatePos();
 }
 
 

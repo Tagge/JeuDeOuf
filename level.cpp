@@ -7,6 +7,7 @@
 #include "spawngate.h"
 #include "leveltimer.h"
 #include "movingplatform.h"
+#include "brick.h"
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
@@ -256,6 +257,10 @@ void Level::addAnimationFromJson(const QJsonObject &object)
         QJsonArray platform3 = object["platform3"].toArray();
         addAnimation(platform3, "spawn_gate");
     }
+    else if(entityName == "Brick"){
+        QJsonArray brick = object["brick"].toArray();
+        addAnimation(brick, "brick");
+    }
 }
 
 void Level::addAnimation(const QJsonArray &images, QString name)
@@ -286,5 +291,8 @@ void Level::createEntityFromJson(QString name, int x, int y, const QJsonObject &
     }
     else if(name == "SpawnGate"){
         livingEntities.push_back(new SpawnGate(x, y, animationsMap));
+    }
+    else if(name == "Brick"){
+        livingEntities.push_back(new Brick(x, y, animationsMap));
     }
 }

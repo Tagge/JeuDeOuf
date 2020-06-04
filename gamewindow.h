@@ -44,12 +44,9 @@ public:
     inline Level *getLvl() const {return lvl;};
     inline void setLevel(Level * value) {lvl = value;};
     inline double getWidthOrigin() const {return widthOrigin;};
-<<<<<<< HEAD
     inline double getHeightOrigin() const {return heightOrigin;};
     inline QString getLevelPath() const {return levelPath;};
-=======
     inline Overlay getOverlay() {return overlay;};
->>>>>>> a383e47544b331fba50502980a544a23dc404845
     void calculate();
 
 private slots:

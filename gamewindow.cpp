@@ -77,7 +77,7 @@ void GameWindow::paintEvent(QPaintEvent *e)
             }
         }
         mutex.lock();
-        if(lvl->getTimer() && lvl->getPlayer()->getLivesLeft() == 0) {
+        if(lvl->getTerminate() && lvl->getPlayer()->getLivesLeft() == 0) {
             if(overCount < 300) {
                 Text gameOver("Game Over", (widthOrigin/3)*ratioWidth, (heightOrigin/2)*ratioHeight, 40, "Super Mario 256", "red");
                 painter.drawPixmap(gameOver.getX(), gameOver.getY(), gameOver.getWidth()*ratioWidth, gameOver.getHeight()*ratioHeight, gameOver.getImage());

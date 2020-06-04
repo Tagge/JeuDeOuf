@@ -9,6 +9,7 @@ class Level;
 class Player: public GroundEntity
 {
 private:
+    int livesLeft;
 public:
     Player();
     Player(int x, int y, const QMap<QString, Animation*> & animations);
@@ -21,6 +22,8 @@ public:
     void endTurn();
     void move(Level * const level, QRect limit);
     void healthChanged();
+    inline int getLivesLeft() {return livesLeft;};
+    inline void setLivesLeft(int value) {livesLeft = value;};
 };
 
 #endif // PLAYER_H

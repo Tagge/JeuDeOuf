@@ -24,6 +24,9 @@ void CalculateThread::run()
 
 void CalculateThread::doCalculations()
 {
+    if(game->getLvl()->getTerminate()) {
+        return;
+    }
     QMutex mutex;
     int size = game->getLvl()->getNbEntities();
     int xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
@@ -50,6 +53,8 @@ void CalculateThread::doCalculations()
     }
     int halfWidth = game->getWidthOrigin()/2;
     int center = game->getLvl()->getXWindow()+halfWidth;
+    xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
+
     if(xPlayer > center){
         mutex.lock();
         game->getLvl()->setXWindow(xPlayer-halfWidth);

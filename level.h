@@ -1,14 +1,14 @@
 #ifndef LEVEL_H
 #define LEVEL_H
-
-
 #include "tile.h"
 #include <QVector>
 #include <QMap>
 #include <QPixmap>
 
+
 class LivingEntity;
 class Player;
+class LevelTimer;
 
 class Level
 {
@@ -34,6 +34,11 @@ public:
     inline bool getWin() const {return win;};
     inline void setWin(bool value) {win = value;};
     inline void addLivingEntity(LivingEntity * le) {livingEntities.push_back(le);};
+    inline bool getTimeElapsed() {return timeElapsed;};
+    void setTimeElapsed(bool value);
+    inline int getDuration() { return duration;};
+    inline void setDuration(int value) {duration = value;};
+
 
 private:
     QMap<QString, Animation*> animationsMap;
@@ -45,7 +50,10 @@ private:
     Player * player;
     int xWindow;
     int yWindow;
+    bool timeElapsed = false;
+    int duration;
     bool win = false;
+    LevelTimer * lvlTimer;
 };
 
 #endif // LEVEL_H

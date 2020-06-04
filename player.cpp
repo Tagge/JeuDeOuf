@@ -41,7 +41,7 @@ void Player::update(Level * const level)
     if(getIntangible() > 0) {
         setIntangible((getIntangible()-1));
     }
-    setAnimPos(getHealth()*3);
+
     if(level->getKey(0)){
         double x = getVectorX();
         setVectorX(x-getAccel());
@@ -74,6 +74,30 @@ void Player::update(Level * const level)
     else if(getFallingTime() > 0){
         fall();
     }
+    if(getHealth() == -1) {
+        setLivesLeft(getLivesLeft()-1);
+        if(getLivesLeft() == 0) {
+            //doSomethingToEndTheGame
+        }
+        level->setXWindow(0);
+        setPosTmp(96, 480);
+        setHealth(0);
+        validatePos();
+        return;
+
+    }
+    if(getFallingTime() > 100 && getHealth() == 0) {
+        level->setXWindow(0);
+        setLivesLeft(getLivesLeft()-1);
+        if(getLivesLeft() == 0) {
+            //doSomethingToEndTheGame
+        }
+        setPosTmp(96, 480);
+        setHealth(0);
+        validatePos();
+        return;
+    }
+    setAnimPos(getHealth()*3);
     QRect limit(level->getXWindow(), 0, level->getNbCols()*constants::TILE_WIDTH-level->getXWindow(), level->getNbRows()*constants::TILE_HEIGHT);
     move(level, limit);
 }
@@ -211,6 +235,7 @@ void Player::move(Level * const level, QRect limit)
     QRectF pos = getHitbox();
     setPosTmp(pos.left()+(int)getVectorX(), pos.top());
     if(getPosTmp().left() < limit.left()){
+        //qDebug() << getPosTmp().left() << " " << limit.left();
         setPosTmp(limit.left(), getPosTmp().top());
     }
     if(getPosTmp().right() > limit.right()){

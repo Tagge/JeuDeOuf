@@ -50,6 +50,8 @@ void CalculateThread::doCalculations()
     }
     int halfWidth = game->getWidthOrigin()/2;
     int center = game->getLvl()->getXWindow()+halfWidth;
+    xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
+
     if(xPlayer > center){
         mutex.lock();
         game->getLvl()->setXWindow(xPlayer-halfWidth);

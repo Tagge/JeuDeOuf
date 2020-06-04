@@ -185,7 +185,9 @@ void Player::collide(LuckyBlock *lb, Level * const l)
     else {
         setPosTmp(getPosTmp().left(), lucky.bottom());
         setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
-        lb->dropItem(l);
+        if(getVectorY() < 0) {
+            lb->dropItem(l);
+        }
     }
     validatePos();
 
@@ -193,12 +195,11 @@ void Player::collide(LuckyBlock *lb, Level * const l)
 
 void Player::collide(PowerUp * pu, Level * const l)
 {
-    if(pu->getIntangible()==0) {
+    if(getHealth() < 1) {
         setHealth(1);
         healthChanged();
-        pu->setHealth(-1);
-        pu->setIntangible(constants::FPS_CALCULATION*3);
     }
+    pu->setHealth(-1);
 }
 
 void Player::collide(MovingPlatform *mp, Level * const l)
@@ -251,11 +252,13 @@ void Player::collide(Brick * b, Level * const l)
     else {
         setPosTmp(getPosTmp().left(), brick.bottom());
         setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
-        if(getHealth() > 0) {
-            b->setHealth(-1);
-        } else {
+        if(getVectorY() < 0) {
             b->jump();
+            if(getHealth() > 0) {
+                b->setHealth(-1);
+            }
         }
+
     }
     validatePos();
 }

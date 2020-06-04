@@ -18,6 +18,7 @@ public:
     void endTurn();
     void move(Level * const level, QRect limit);
     void jump();
+    virtual void deathTimer();
 };
 
 #endif // BRICK_H

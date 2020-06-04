@@ -20,6 +20,9 @@ Brick::Brick(int x, int y, const QMap<QString, Animation *> &animations)
 
 void Brick::update(Level * const level)
 {
+    if(getIntangible() > 0) {
+        setIntangible((getIntangible()-1));
+    }
     if(movingFor == 6) {
         setVectorY(-getVectorY());
     }
@@ -41,10 +44,16 @@ void Brick::collide(LivingEntity *e, Level * const l)
 
 void Brick::collide(Roomba *r, Level * const l)
 {
-    if(r->getHealth() == 1 && r->getHitbox().bottom() == getHitbox().bottom()) {
-        setHealth(-1);
-        r->setFacingBack(!getFacingBack());
-        r->setVectorX(-r->getVectorX());
+    if(getIntangible() == 0) {
+        if(r->getHitbox().bottom() == getHitbox().bottom()) {
+            if(r->getHealth() == 0) {
+                setHealth(-1);
+                jump();
+            }
+            r->setFacingBack(!r->getFacingBack());
+            r->setVectorX(-r->getVectorX());
+            setIntangible(10);
+        }
     }
 }
 
@@ -75,5 +84,15 @@ void Brick::jump()
     if(movingFor == 0) {
         setVectorY(-0.05*constants::TILE_HEIGHT);
         movingFor=1;
+    }
+}
+
+void Brick::deathTimer()
+{
+    if(getHealth() < 0){
+        setHealth(getHealth()-1);
+    }
+    if(getHealth() == -constants::FPS_CALCULATION/6){
+        setIsDead(true);
     }
 }

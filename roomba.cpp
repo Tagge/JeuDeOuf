@@ -75,20 +75,12 @@ void Roomba::collide(LuckyBlock * lb, Level * const l)
     int botdir = abs(pos.top() - lucky.bottom());
     if(leftdir <= topdir && leftdir <= rightdir && leftdir <= botdir) {
         direction = 1;
-        qDebug() << "touched from left by roomba";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     } else if (topdir <= leftdir && topdir <= rightdir && topdir <= botdir){
         direction = 2;
-        qDebug() << "touched from top by roomba";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     } else if (rightdir <= leftdir && rightdir <= topdir && rightdir <= botdir) {
         direction = 3;
-        qDebug() << "touched from right by roomba";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     } else {
         direction = 4;
-        qDebug() << "touched from bot by roomba";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     }
 
     //Gauche
@@ -142,6 +134,11 @@ void Roomba::collide(Roomba *r, Level * const l)
             r->setIntangible(3600);
         }
     }
+}
+
+void Roomba::collide(Brick *b, Level * const l)
+{
+
 }
 
 void Roomba::endTurn()

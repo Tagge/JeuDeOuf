@@ -9,6 +9,18 @@ Animation::Animation()
     imagesReverse = &images;
 }
 
+Animation::~Animation() {
+    for(int i = 0; i<images.size(); i++) {
+        delete(images[i]);
+    }
+    /*if(imagesReverse != nullptr) {
+        for(int i = 0; i<imagesReverse->size(); i++) {
+            delete(imagesReverse->at(i));
+        }
+        delete(imagesReverse);
+    }*/
+}
+
 void Animation::addImage(QPixmap *pixmap)
 {
     images.push_back(pixmap);

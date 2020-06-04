@@ -14,7 +14,10 @@ class Level
 {
 public:
     Level();
+    ~Level();
     Level(QString levelFileName);
+    Level(QString levelFileName, int livesLeft);
+    Level(QString levelFileName, int livesLeft, LevelTimer * timer);
     void addAnimationFromJson(const QJsonObject & object);
     void addAnimation(const QJsonArray & images, QString name);
     void createEntityFromJson(QString name, int x, int y, const QJsonObject & param);
@@ -38,7 +41,9 @@ public:
     void setTimeElapsed(bool value);
     inline int getDuration() { return duration;};
     inline void setDuration(int value) {duration = value;};
-
+    inline bool getTerminate() {return terminate;};
+    inline void setTerminate(bool value) {terminate = value;};
+    inline LevelTimer * getTimer() {return lvlTimer;};
 
 private:
     QMap<QString, Animation*> animationsMap;
@@ -54,6 +59,7 @@ private:
     int duration;
     bool win = false;
     LevelTimer * lvlTimer;
+    bool terminate = false;
 };
 
 #endif // LEVEL_H

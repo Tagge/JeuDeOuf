@@ -14,6 +14,7 @@ Entity::Entity()
     facingBack = false;
 }
 
+
 QPixmap *Entity::getSprite() const
 {
     if(facingBack){

@@ -194,16 +194,6 @@ Level::Level(QString levelFileName)
         lvlTimer = new LevelTimer();
         lvlTimer->setLvl(this);
         lvlTimer->start();
-        Animation * animationmp = new Animation();
-        QPixmap * mppix = new QPixmap(":/sprites/Platformx2");
-        animationmp->addImage(mppix);
-        Animation * animationmp2 = new Animation();
-        QPixmap * mppix2 = new QPixmap(":/sprites/Platformx3");
-        animationmp2->addImage(mppix2);
-        animationsMap.insert("platform2", animationmp);
-        animationsMap.insert("platform3", animationmp2);
-        MovingPlatform * mp = new MovingPlatform(10,2,6,4,2,animationsMap);
-        livingEntities.push_back(mp);
     }
     else{
         qDebug() << "File not found";

@@ -56,11 +56,11 @@ void GameWindow::gameLoop()
 
 void GameWindow::paintEvent(QPaintEvent *e)
 {
+    QPainter painter(this);
     if(inGame){
         QMutex mutex;
         double ratioWidth = width()/widthOrigin;
         double ratioHeight = height()/heightOrigin;
-        QPainter painter(this);
         //Paint the map
         int nbRows = lvl->getNbRows();
         int nbCols = lvl->getNbCols();
@@ -89,6 +89,12 @@ void GameWindow::paintEvent(QPaintEvent *e)
         for(Animation * animation : lvl->getAnimationMap()){
             animation->iterate();
         }
+    }
+    else{
+        QPixmap pix(":/sprites/bg_menu");
+        int y = heightOrigin-135*constants::TILE_HEIGHT/16.0;
+        qDebug() << y;
+        painter.drawPixmap(0, y, 240*constants::TILE_WIDTH/16.0, 135*constants::TILE_HEIGHT/16.0, pix);
     }
 }
 

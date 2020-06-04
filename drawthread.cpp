@@ -33,7 +33,6 @@ void DrawThread::doDraw()
         int yWindow = game->getLvl()->getYWindow();
         game->getLvl()->setYWindow(yWindow-game->getHeightOrigin());
         mutex.unlock();
-        return;
     }
     game->repaint();
 }

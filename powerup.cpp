@@ -45,3 +45,11 @@ void PowerUp::move(Level * const level, QRect limit)
 {
 
 }
+
+
+void PowerUp::deathTimer()
+{
+    if(getHealth() < 0){
+        setIsDead(true);
+    }
+}

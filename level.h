@@ -27,6 +27,7 @@ public:
     inline Tile * getTile(int x, int y) const {return map[x][y];};
     inline int getNbEntities() const {return livingEntities.size();}
     inline LivingEntity * getEntity(int pos) const {return livingEntities[pos];}
+    inline void removeEntity(int pos) {livingEntities.remove(pos);};
     inline bool getKey(int pos) const {return keys[pos];}
     inline void setKey(int pos, bool value) {keys[pos] = value;}
     inline Player * getPlayer() const {return player;};

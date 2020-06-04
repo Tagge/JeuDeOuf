@@ -191,3 +191,14 @@ void Roomba::move(Level * const level, QRect limit)
     }
     validatePos();
 }
+
+void Roomba::deathTimer()
+{
+    if(getHealth() < 0){
+        setAnimPos(1);
+        setHealth(getHealth()-1);
+    }
+    if(getHealth() == -constants::FPS_CALCULATION/4){
+        setIsDead(true);
+    }
+}

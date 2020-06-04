@@ -14,6 +14,7 @@ public:
     virtual void collide(LuckyBlock * lb, Level * const l);
     void endTurn();
     void move(Level * const level, QRect limit);
+    virtual void deathTimer();
 };
 
 #endif // POWERUP_H

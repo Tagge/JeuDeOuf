@@ -14,7 +14,6 @@ private:
     QRectF hitbox;
     bool facingBack;
     int relativePosImage = 0;
-    bool isDead = false;
 public:
     Entity();
     inline QRectF getHitbox() {return hitbox;};
@@ -30,8 +29,6 @@ public:
     bool getFacingBack() const;
     inline int getRelativePosImage() const {return relativePosImage;};
     inline void setRelativePosImage(double value) {relativePosImage = value*constants::TILE_WIDTH;};
-    inline bool getIsDead() const {return isDead;};
-    inline void setIsDead(bool value) {isDead = value;};
 };
 
 #endif // ENTITY_H

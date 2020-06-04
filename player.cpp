@@ -33,19 +33,8 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
 
 void Player::update(Level * const level)
 {
-    if(getHealth() == -1) {
-        setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            qDebug("Game over");
-            //doSomethingToEndTheGame
-        }
-        level->setXWindow(0);
-        setPosTmp(96, 480);
-        setHealth(0);
-        validatePos();
-        level->setTerminate(true);
+    if(getHealth() < 0){
         return;
-
     }
     if(getFallingTime() > 100 && getHealth() == 0) {
         level->setXWindow(0);
@@ -287,5 +276,17 @@ void Player::healthChanged()
         setHitbox(hitbox);
     }
 
+}
+
+void Player::deathTimer()
+{
+    if(getHealth() < 0){
+        setAnimPos(6);
+        setHealth(getHealth()-1);
+    }
+    if(getHealth() == -constants::FPS_CALCULATION/2){
+        setLivesLeft(getLivesLeft()-1);
+        setIsDead(true);
+    }
 }
 

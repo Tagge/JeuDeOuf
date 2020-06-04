@@ -20,6 +20,7 @@ public:
     virtual void collide(Roomba * r, Level * const l);
     virtual void endTurn();
     void move(Level * const level, QRect limit);
+    virtual void deathTimer();
 };
 
 #endif // ROOMBA_H

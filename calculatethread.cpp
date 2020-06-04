@@ -24,6 +24,9 @@ void CalculateThread::run()
 
 void CalculateThread::doCalculations()
 {
+    if(game->getLvl()->getTerminate()) {
+        return;
+    }
     QMutex mutex;
     int size = game->getLvl()->getNbEntities();
     int xPlayer = game->getLvl()->getPlayer()->getHitbox().left();

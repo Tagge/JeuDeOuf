@@ -28,6 +28,7 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
     setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setJumpTime(0);
+    livesLeft = 3;
 }
 
 void Player::update(Level * const level)
@@ -35,6 +36,7 @@ void Player::update(Level * const level)
     if(getHealth() == -1) {
         setLivesLeft(getLivesLeft()-1);
         if(getLivesLeft() == 0) {
+<<<<<<< HEAD
             //doSomethingToEndTheGame
         }
         level->setXWindow(0);
@@ -48,11 +50,22 @@ void Player::update(Level * const level)
         level->setXWindow(0);
         setLivesLeft(getLivesLeft()-1);
         if(getLivesLeft() == 0) {
+            qDebug("Game over");
             //doSomethingToEndTheGame
         }
         setPosTmp(96, 480);
         setHealth(0);
         validatePos();
+        level->setTerminate(true);
+        return;
+    }
+    if(getFallingTime() > 100 && getHealth() >= 0) {
+        setLivesLeft(getLivesLeft()-1);
+        if(getLivesLeft() == 0) {
+            qDebug("Game over");
+            //doSomethingToEndTheGame
+        }
+        level->setTerminate(true);
         return;
     }
     if(underCeiling(level)){
@@ -65,7 +78,7 @@ void Player::update(Level * const level)
     if(getIntangible() > 0) {
         setIntangible((getIntangible()-1));
     }
-
+    setAnimPos(getHealth()*3);
     if(level->getKey(0)){
         double x = getVectorX();
         setVectorX(x-getAccel());

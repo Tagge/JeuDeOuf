@@ -1,6 +1,7 @@
 #include "gamewindow.h"
 #include "player.h"
 #include "ui_gamewindow.h"
+#include "leveltimer.h"
 #include <QDebug>
 #include <QMutex>
 #include <QPainter>
@@ -34,6 +35,7 @@ void GameWindow::createGame()
 {
     ui->levelTest->hide();
     lvl = new Level(":/levels/level_test.json");
+    levelPath = ":/levels/level_test.json";
     int yWindow = lvl->getYWindow();
     lvl->setYWindow(yWindow-heightOrigin);
     inGame = 1;
@@ -55,6 +57,15 @@ void GameWindow::gameLoop()
 void GameWindow::paintEvent(QPaintEvent *e)
 {
     if(inGame){
+        if(lvl->getTerminate()) {
+            LevelTimer * timer = lvl->getTimer();
+            int livesLeft = lvl->getPlayer()->getLivesLeft();
+            delete(lvl);
+            lvl = new Level(levelPath, livesLeft, timer);
+            timer->setLvl(lvl);
+            int yWindow = lvl->getYWindow();
+            lvl->setYWindow(yWindow-heightOrigin);
+        }
         QMutex mutex;
         double ratioWidth = width()/widthOrigin;
         double ratioHeight = height()/heightOrigin;

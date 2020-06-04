@@ -5,6 +5,7 @@
 #include "roomba.h"
 #include "luckyblock.h"
 #include "powerup.h"
+#include "movingplatform.h"
 #include <stdlib.h>
 
 Player::Player():GroundEntity(0, 0)
@@ -115,7 +116,7 @@ void Player::collide(Roomba *r, Level * const l)
             }
             else {
                 setHealth(getHealth()-1);
-                setIntangible(constants::FPS_CALCULATION/6);
+                setIntangible(constants::FPS_CALCULATION/2);
                 healthChanged();
             }
         } else {
@@ -137,7 +138,7 @@ void Player::collide(Roomba *r, Level * const l)
                     }
                     else {
                         setHealth(getHealth()-1);
-                        setIntangible(constants::FPS_CALCULATION/4);
+                        setIntangible(constants::FPS_CALCULATION/2);
                         healthChanged();
                     }
                 }
@@ -196,6 +197,19 @@ void Player::collide(PowerUp * pu, Level * const l)
         healthChanged();
         pu->setHealth(-1);
         pu->setIntangible(constants::FPS_CALCULATION*3);
+    }
+}
+
+void Player::collide(MovingPlatform *mp, Level * const l)
+{
+    if((mp->getHitbox().bottom()+mp->getHitbox().top())/2 > getHitbox().bottom() && getVectorY() >= 0) {
+        if(mp->getSteppedOnBy().indexOf(this) == -1) {
+            qDebug() << "step on";
+            mp->stepOn(this);
+        }
+        setPosTmp(getHitbox().left(), mp->getHitbox().top() - getHitbox().height());
+        setOnSolid(true);
+        validatePos();
     }
 }
 
@@ -289,4 +303,3 @@ void Player::deathTimer()
         setIsDead(true);
     }
 }
-

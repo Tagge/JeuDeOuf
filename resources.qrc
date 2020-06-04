@@ -46,5 +46,7 @@
         <file>sprites/PowerBrick/PowerBrick_0012_12.png</file>
         <file>sprites/Bolt.png</file>
         <file>sprites/bg_menu.png</file>
+        <file>sprites/Platformx2.png</file>
+        <file>sprites/Platformx3.png</file>
     </qresource>
 </RCC>

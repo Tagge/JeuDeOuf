@@ -78,7 +78,6 @@ void GameWindow::paintEvent(QPaintEvent *e)
         //Paint the entities
         mutex.lock();
         int size = lvl->getNbEntities();
-        qDebug()  << size;
         for(int idEntity = 0; idEntity < size; idEntity++){
             LivingEntity * entity = lvl->getEntity(idEntity);
             QRectF rect = entity->getImagePos();

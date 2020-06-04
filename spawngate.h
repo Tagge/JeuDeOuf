@@ -13,6 +13,7 @@ public:
     virtual void update(Level * const level) {};
     void move(Level * const level, QRect limit) {};
     void endTurn(){};
+    virtual void deathTimer();
 };
 
 #endif // SPAWNGATE_H

@@ -20,6 +20,7 @@ GameWindow::GameWindow(QWidget *parent)
     drawThread->setGame(this);
     calculateThread = new CalculateThread();
     calculateThread->setGame(this);
+    overlay = Overlay();
     connect(ui->levelTest, SIGNAL(clicked()), this, SLOT(createGame()));
     /*timer.setTimerType(Qt::PreciseTimer);
     connect(&timer, SIGNAL(timeout()), this, SLOT(gameLoop()));
@@ -56,17 +57,28 @@ void GameWindow::gameLoop()
 
 void GameWindow::paintEvent(QPaintEvent *e)
 {
+    QPainter painter(this);
     if(inGame){
         QMutex mutex;
+        if(lvl->getTerminate() && lvl->getPlayer()->getLivesLeft() != 0) {
+            mutex.try_lock();
+            LevelTimer * timer = lvl->getTimer();
+            int livesLeft = lvl->getPlayer()->getLivesLeft();
+            delete(lvl);
+            lvl = new Level(getLevelPath(), livesLeft, timer);
+            timer->setLvl(lvl);
+            int yWindow = lvl->getYWindow();
+            lvl->setYWindow(yWindow-getHeightOrigin());
+            mutex.unlock();
+        }
         double ratioWidth = width()/widthOrigin;
         double ratioHeight = height()/heightOrigin;
-        QPainter painter(this);
         //Paint the map
         int nbRows = lvl->getNbRows();
         int nbCols = lvl->getNbCols();
         for(int row = 0; row < nbRows; row++){
             for(int col = 0; col < nbCols; col++){
-                mutex.lock();
+                mutex.try_lock();
                 Tile * tile = lvl->getTile(row, col);
                 QRect rect = tile->getPos();
                 int x  = (rect.left()-lvl->getXWindow())*ratioWidth;
@@ -75,8 +87,20 @@ void GameWindow::paintEvent(QPaintEvent *e)
                 mutex.unlock();
             }
         }
+        if(lvl->getTerminate() && lvl->getPlayer()->getLivesLeft() == 0) {
+            if(overCount < 300) {
+                Text gameOver("Game Over", (widthOrigin/3)*ratioWidth, (heightOrigin/2)*ratioHeight, 40, "Super Mario 256", "red");
+                painter.drawPixmap(gameOver.getX(), gameOver.getY(), gameOver.getWidth()*ratioWidth, gameOver.getHeight()*ratioHeight, gameOver.getImage());
+                overCount++;
+                return;
+            } else {
+                inGame = false;
+                overCount = 0;
+                return;
+            }
+        }
         //Paint the entities
-        mutex.lock();
+        mutex.try_lock();
         int size = lvl->getNbEntities();
         for(int idEntity = 0; idEntity < size; idEntity++){
             LivingEntity * entity = lvl->getEntity(idEntity);
@@ -89,13 +113,30 @@ void GameWindow::paintEvent(QPaintEvent *e)
         for(Animation * animation : lvl->getAnimationMap()){
             animation->iterate();
         }
+        //Paint the overlay
+        mutex.try_lock();
+        overlay.update(lvl);
+        for(auto & x : overlay.getAllTexts()) {
+            int topLeftX = x.getX() * ratioWidth;
+            int topLeftY = x.getY() * ratioHeight;
+            int height = x.getHeight() * ratioHeight;
+            int width = x.getWidth() * ratioWidth;
+            painter.drawPixmap(topLeftX, topLeftY, width, height, x.getImage());
+        }
+        mutex.unlock();
+
+    }
+    else{
+        ui->levelTest->show();
+        QPixmap pix(":/sprites/bg_menu");
+        int y = heightOrigin-135*constants::TILE_HEIGHT/16.0;
+        qDebug() << y;
+        painter.drawPixmap(0, y, 240*constants::TILE_WIDTH/16.0, 135*constants::TILE_HEIGHT/16.0, pix);
     }
 }
 
 void GameWindow::keyPressEvent(QKeyEvent *event)
 {
-    QMutex mutex;
-    //mutex.lock();
     if(inGame){
         if(event->key() == Qt::Key_Left){
             lvl->setKey(0, true);
@@ -107,8 +148,6 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
             lvl->setKey(2, true);
         }
     }
-
-    //mutex.unlock();
 }
 
 void GameWindow::keyReleaseEvent(QKeyEvent * event)

@@ -22,17 +22,8 @@ void DrawThread::run()
 
 void DrawThread::doDraw()
 {
+    qDebug() << "drawDebut";
     QMutex mutex;
-    if(game->getLvl()->getTerminate()) {
-        mutex.lock();
-        LevelTimer * timer = game->getLvl()->getTimer();
-        int livesLeft = game->getLvl()->getPlayer()->getLivesLeft();
-        delete(game->getLvl());
-        game->setLevel(new Level(game->getLevelPath(), livesLeft, timer));
-        timer->setLvl(game->getLvl());
-        int yWindow = game->getLvl()->getYWindow();
-        game->getLvl()->setYWindow(yWindow-game->getHeightOrigin());
-        mutex.unlock();
-    }
     game->repaint();
+    qDebug() << "drawFin";
 }

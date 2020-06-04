@@ -110,6 +110,7 @@ void Player::collide(Roomba *r, Level * const l)
                 r->setHealth(r->getHealth()-1);
                 r->setVectorX(0);
                 setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
+                r->setIntangible(constants::FPS_CALCULATION/6);
             }
             else {
                 setHealth(getHealth()-1);
@@ -132,6 +133,7 @@ void Player::collide(Roomba *r, Level * const l)
                     if(player.bottom() < roomba.bottom()) {
                         r->setVectorX(0);
                         setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
+                        r->setIntangible(constants::FPS_CALCULATION/6);
                     }
                     else {
                         setHealth(getHealth()-1);

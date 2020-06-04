@@ -23,15 +23,18 @@ SOURCES += \
     entity.cpp \
     groundentity.cpp \
     level.cpp \
+    leveltimer.cpp \
     livingentity.cpp \
     luckyblock.cpp \
     main.cpp \
     gamewindow.cpp \
+    overlay.cpp \
     player.cpp \
     powerup.cpp \
     roomba.cpp \
     spawngate.cpp \
     sprite.cpp \
+    text.cpp \
     tile.cpp
 
 HEADERS += \
@@ -44,13 +47,16 @@ HEADERS += \
     groundentity.h \
     header.h \
     level.h \
+    leveltimer.h \
     livingentity.h \
     luckyblock.h \
+    overlay.h \
     player.h \
     powerup.h \
     roomba.h \
     spawngate.h \
     sprite.h \
+    text.h \
     tile.h
 
 FORMS += \

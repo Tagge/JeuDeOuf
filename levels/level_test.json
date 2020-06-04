@@ -3,6 +3,7 @@
   "start_y" : 1,
   "rows" : 8,
   "columns" : 60,
+  "duration": 60000,
   "tiles" : [
     {
       "id" : "0",

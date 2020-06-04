@@ -5,11 +5,13 @@
 #include "header.h"
 #include "endgate.h"
 #include "spawngate.h"
+#include "leveltimer.h"
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+
 
 
 //Mock level
@@ -18,7 +20,7 @@ Level::Level()
     int nbPix = 10;
     nbRows = 10;
     nbCols = 100;
-
+    duration = 60000;
     xWindow = 0;
     yWindow = nbRows*constants::TILE_HEIGHT-8*constants::TILE_HEIGHT;
     //yWindow = 0;
@@ -74,9 +76,20 @@ Level::Level()
     livingEntities.push_back(roomba);
     livingEntities.push_back(lb);
 
+    lvlTimer = new LevelTimer();
+    lvlTimer->setLvl(this);
+    lvlTimer->start();
+
     keys.push_back(false);
     keys.push_back(false);
     keys.push_back(false);
+}
+
+void Level::setTimeElapsed(bool value) {
+    timeElapsed = value;
+    if(timeElapsed == true) {
+        player->setHealth(-1);
+    }
 }
 
 Level::Level(QString levelFileName)
@@ -96,6 +109,7 @@ Level::Level(QString levelFileName)
         level = levelJson.object();
         nbRows = level["rows"].toInt();
         nbCols = level["columns"].toInt();
+        duration = level["duration"].toInt();
         xWindow = level["start_x"].toInt()*constants::TILE_WIDTH;
         yWindow = (nbRows-level["start_y"].toInt())*constants::TILE_HEIGHT;
         for(int row = 0; row < nbRows; row++){

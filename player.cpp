@@ -203,11 +203,14 @@ void Player::collide(PowerUp * pu, Level * const l)
 
 void Player::collide(MovingPlatform *mp, Level * const l)
 {
-    if(mp->getHitbox().bottom() > getHitbox().bottom() && getVectorY() > 0) {
+    if((mp->getHitbox().bottom()+mp->getHitbox().top())/2 > getHitbox().bottom() && getVectorY() >= 0) {
         if(mp->getSteppedOnBy().indexOf(this) == -1) {
+            qDebug() << "step on";
             mp->stepOn(this);
         }
+        setPosTmp(getHitbox().left(), mp->getHitbox().top() - getHitbox().height());
         setOnSolid(true);
+        validatePos();
     }
 }
 

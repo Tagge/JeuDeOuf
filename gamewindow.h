@@ -29,6 +29,7 @@ private:
     DrawThread * drawThread;
     CalculateThread * calculateThread;
     QTimer timer;
+    QString levelPath;
 
 public:
     GameWindow(QWidget *parent = nullptr);

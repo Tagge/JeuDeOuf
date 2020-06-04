@@ -28,10 +28,29 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
     setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setJumpTime(0);
+    livesLeft = 3;
 }
 
 void Player::update(Level * const level)
 {
+    if(getHealth() == -1) {
+        setLivesLeft(getLivesLeft()-1);
+        if(getLivesLeft() == 0) {
+            qDebug("Game over");
+            //doSomethingToEndTheGame
+        }
+        level->setTerminate(true);
+        return;
+    }
+    if(getFallingTime() > 100 && getHealth() >= 0) {
+        setLivesLeft(getLivesLeft()-1);
+        if(getLivesLeft() == 0) {
+            qDebug("Game over");
+            //doSomethingToEndTheGame
+        }
+        level->setTerminate(true);
+        return;
+    }
     if(underCeiling(level)){
         setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
     }
@@ -41,7 +60,7 @@ void Player::update(Level * const level)
     if(getIntangible() > 0) {
         setIntangible((getIntangible()-1));
     }
-
+    setAnimPos(getHealth()*3);
     if(level->getKey(0)){
         double x = getVectorX();
         setVectorX(x-getAccel());
@@ -74,30 +93,7 @@ void Player::update(Level * const level)
     else if(getFallingTime() > 0){
         fall();
     }
-    if(getHealth() == -1) {
-        setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            //doSomethingToEndTheGame
-        }
-        level->setXWindow(0);
-        setPosTmp(96, 480);
-        setHealth(0);
-        validatePos();
-        return;
 
-    }
-    if(getFallingTime() > 100 && getHealth() == 0) {
-        level->setXWindow(0);
-        setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            //doSomethingToEndTheGame
-        }
-        setPosTmp(96, 480);
-        setHealth(0);
-        validatePos();
-        return;
-    }
-    setAnimPos(getHealth()*3);
     QRect limit(level->getXWindow(), 0, level->getNbCols()*constants::TILE_WIDTH-level->getXWindow(), level->getNbRows()*constants::TILE_HEIGHT);
     move(level, limit);
 }

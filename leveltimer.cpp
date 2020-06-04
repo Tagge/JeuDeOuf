@@ -14,9 +14,14 @@ void LevelTimer::run() {
     timer.start(ourLvl->getDuration());
     timeBegin = std::chrono::steady_clock::now();
     exec();
+    timer.stop();
+    ourLvl = nullptr;
 }
 
 void LevelTimer::triggerEnd() {
+    if(ourLvl == nullptr){
+        return;
+    }
     ourLvl->setTimeElapsed(true);
 }
 

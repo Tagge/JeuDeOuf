@@ -26,6 +26,9 @@ void CalculateThread::doCalculations()
 {
     qDebug() << "calcStart";
     QMutex mutex;
+    if(!game->getIngame()) {
+        return;
+    }
     if(game->getLvl()->getTerminate()) {
         return;
     }

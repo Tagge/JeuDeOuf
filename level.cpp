@@ -100,7 +100,9 @@ Level::~Level() {
     for(auto const& x : animationsMap) {
         delete(x);
     }
-    lvlTimer->terminate();
+    if(player->getLivesLeft() == 0) {
+        lvlTimer->quit();
+    }
 }
 
 void Level::setTimeElapsed(bool value) {
@@ -112,7 +114,7 @@ void Level::setTimeElapsed(bool value) {
 }
 
 Level::Level(QString levelFileName, int livesLeft, LevelTimer * timer) : Level::Level(levelFileName, livesLeft) {
-    lvlTimer->terminate();
+    lvlTimer->quit();
     lvlTimer = timer;
 }
 

@@ -36,7 +36,6 @@ void Player::update(Level * const level)
     if(getHealth() == -1) {
         setLivesLeft(getLivesLeft()-1);
         if(getLivesLeft() == 0) {
-<<<<<<< HEAD
             //doSomethingToEndTheGame
         }
         level->setXWindow(0);

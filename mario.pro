@@ -19,6 +19,7 @@ SOURCES += \
     animation.cpp \
     brick.cpp \
     calculatethread.cpp \
+    checkpoint.cpp \
     drawthread.cpp \
     endgate.cpp \
     entity.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     animation.h \
     brick.h \
     calculatethread.h \
+    checkpoint.h \
     drawthread.h \
     endgate.h \
     entity.h \

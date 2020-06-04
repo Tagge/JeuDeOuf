@@ -6,6 +6,7 @@
 #include <QTime>
 #include "player.h"
 #include "header.h"
+#include "checkpoint.h"
 
 CalculateThread::CalculateThread()
 {
@@ -24,8 +25,10 @@ void CalculateThread::run()
 
 void CalculateThread::doCalculations()
 {
-    qDebug() << "calcStart";
     QMutex mutex;
+    if(game->getLvl()->getWin()) {
+        return;
+    }
     if(game->getLvl()->getTerminate()) {
         return;
     }
@@ -49,7 +52,7 @@ void CalculateThread::doCalculations()
     int xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
     for(int idEntity = 0; idEntity < size; idEntity++){
         int left = game->getLvl()->getEntity(idEntity)->getHitbox().left();
-        if(left >= xPlayer-(constants::TILE_WIDTH*10) && left <= xPlayer+(constants::TILE_WIDTH*10) && !game->getLvl()->getWin()){
+        if(left >= xPlayer-(constants::TILE_WIDTH*10) && left <= xPlayer+(constants::TILE_WIDTH*10)){
             mutex.try_lock();
             game->getLvl()->getEntity(idEntity)->update(game->getLvl());
             mutex.unlock();
@@ -72,10 +75,15 @@ void CalculateThread::doCalculations()
     int halfWidth = game->getWidthOrigin()/2;
     int center = game->getLvl()->getXWindow()+halfWidth;
     xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
+    if(xPlayer > game->getLvl()->getCheckpoint()->getXCheckpoint()){
+        mutex.try_lock();
+        game->getLvl()->getCheckpoint()->setChecked(true);
+        game->getLvl()->getCheckpoint()->setAnimPos(1);
+        mutex.unlock();
+    }
     if(xPlayer > center){
         mutex.try_lock();
         game->getLvl()->setXWindow(xPlayer-halfWidth);
         mutex.unlock();
     }
-    qDebug() << "calcFin";
 }

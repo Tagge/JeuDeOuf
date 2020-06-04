@@ -17,9 +17,7 @@ void LevelTimer::run() {
 }
 
 void LevelTimer::triggerEnd() {
-    qDebug()  << "timer1";
     ourLvl->setTimeElapsed(true);
-    qDebug()  << "timer2";
 }
 
 int LevelTimer::getTimeLeft() {

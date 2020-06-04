@@ -25,6 +25,7 @@ public:
     void healthChanged();
     inline int getLivesLeft() {return livesLeft;};
     inline void setLivesLeft(int value) {livesLeft = value;};
+    virtual void deathTimer();
 };
 
 #endif // PLAYER_H

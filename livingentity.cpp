@@ -24,6 +24,16 @@ void LivingEntity::setIntangible(int value)
     intangible = value;
 }
 
+void LivingEntity::deathTimer()
+{
+    if(health < 0){
+        health--;
+    }
+    if(health == -constants::FPS_CALCULATION/2){
+        isDead = true;
+    }
+}
+
 LivingEntity::LivingEntity():Entity()
 {
     vectorX = 0;

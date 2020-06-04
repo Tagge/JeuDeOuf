@@ -57,15 +57,6 @@ void GameWindow::gameLoop()
 void GameWindow::paintEvent(QPaintEvent *e)
 {
     if(inGame){
-        if(lvl->getTerminate()) {
-            LevelTimer * timer = lvl->getTimer();
-            int livesLeft = lvl->getPlayer()->getLivesLeft();
-            delete(lvl);
-            lvl = new Level(levelPath, livesLeft, timer);
-            timer->setLvl(lvl);
-            int yWindow = lvl->getYWindow();
-            lvl->setYWindow(yWindow-heightOrigin);
-        }
         QMutex mutex;
         double ratioWidth = width()/widthOrigin;
         double ratioHeight = height()/heightOrigin;

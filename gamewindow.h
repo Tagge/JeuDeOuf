@@ -40,7 +40,10 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
     //Getters and setters
     inline Level *getLvl() const {return lvl;};
+    inline void setLevel(Level * value) {lvl = value;};
     inline double getWidthOrigin() const {return widthOrigin;};
+    inline double getHeightOrigin() const {return heightOrigin;};
+    inline QString getLevelPath() const {return levelPath;};
     void calculate();
 
 private slots:

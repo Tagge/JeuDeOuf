@@ -22,6 +22,7 @@ private:
     double acceleration = 2;
     double health = 0;
     int intangible = 0;
+    bool isDead = false;
 
 public:
     LivingEntity();
@@ -50,8 +51,11 @@ public:
     inline virtual void collide(EndGate * eg, Level * const l) {};
     double getHealth() const;
     void setHealth(double value);
+    inline bool getIsDead() const {return isDead;};
+    inline void setIsDead(bool value) {isDead = value;};
     int getIntangible() const;
     void setIntangible(int value);
+    virtual void deathTimer();
 };
 
 #endif // LIVINGENTITY_H

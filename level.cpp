@@ -266,7 +266,7 @@ void Level::addAnimationFromJson(const QJsonObject &object)
         QJsonArray sizes = params["size"].toArray();
         int nbPlatforms = xStarts.size();
         for(int platform = 0; platform < nbPlatforms; platform++){
-            livingEntities.push_back(new Roomba(platform, 4, animationsMap));
+            livingEntities.push_back(new MovingPlatform(xStarts[platform].toInt(), yStarts[platform].toInt(), xEnds[platform].toInt(), yEnds[platform].toInt(), sizes[platform].toInt(), animationsMap));
         }
     }
 }

@@ -28,11 +28,7 @@ QPixmap *Entity::getSprite() const
 
 void Entity::addAnimation(Animation *value)
 {
-    QMutex mutex;
-    mutex.lock();
     value->reverse();
-    mutex.unlock();
-
     animations.push_back(value);
 }
 

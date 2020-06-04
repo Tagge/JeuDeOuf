@@ -77,6 +77,8 @@ Level::Level()
     livingEntities.push_back(roomba);
     livingEntities.push_back(lb);
 
+    levelId = 1;
+
     lvlTimer = new LevelTimer();
     lvlTimer->setLvl(this);
     lvlTimer->start();
@@ -104,6 +106,7 @@ Level::~Level() {
 void Level::setTimeElapsed(bool value) {
     timeElapsed = value;
     if(timeElapsed == true) {
+        lvlTimer->setTimeBegin(std::chrono::steady_clock::now());
         player->setHealth(-1);
     }
 }
@@ -135,6 +138,7 @@ Level::Level(QString levelFileName)
         nbRows = level["rows"].toInt();
         nbCols = level["columns"].toInt();
         duration = level["duration"].toInt();
+        levelId = level["id"].toInt();
         xWindow = level["start_x"].toInt()*constants::TILE_WIDTH;
         yWindow = (nbRows-level["start_y"].toInt())*constants::TILE_HEIGHT;
         for(int row = 0; row < nbRows; row++){
@@ -194,16 +198,6 @@ Level::Level(QString levelFileName)
         lvlTimer = new LevelTimer();
         lvlTimer->setLvl(this);
         lvlTimer->start();
-        Animation * animationmp = new Animation();
-        QPixmap * mppix = new QPixmap(":/sprites/Platformx2");
-        animationmp->addImage(mppix);
-        Animation * animationmp2 = new Animation();
-        QPixmap * mppix2 = new QPixmap(":/sprites/Platformx3");
-        animationmp2->addImage(mppix2);
-        animationsMap.insert("platform2", animationmp);
-        animationsMap.insert("platform3", animationmp2);
-        MovingPlatform * mp = new MovingPlatform(10,2,6,4,2,animationsMap);
-        livingEntities.push_back(mp);
     }
     else{
         qDebug() << "File not found";
@@ -266,7 +260,7 @@ void Level::addAnimationFromJson(const QJsonObject &object)
         QJsonArray sizes = params["size"].toArray();
         int nbPlatforms = xStarts.size();
         for(int platform = 0; platform < nbPlatforms; platform++){
-            livingEntities.push_back(new Roomba(platform, 4, animationsMap));
+            livingEntities.push_back(new MovingPlatform(xStarts[platform].toInt(), yStarts[platform].toInt(), xEnds[platform].toInt(), yEnds[platform].toInt(), sizes[platform].toInt(), animationsMap));
         }
     }
 }

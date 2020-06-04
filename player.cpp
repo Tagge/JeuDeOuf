@@ -6,6 +6,7 @@
 #include "luckyblock.h"
 #include "powerup.h"
 #include "movingplatform.h"
+#include "brick.h"
 #include <stdlib.h>
 
 Player::Player():GroundEntity(0, 0)
@@ -29,7 +30,7 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
     setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setJumpTime(0);
-    livesLeft = 60;
+    livesLeft = 3;
 }
 
 void Player::update(Level * const level)
@@ -109,6 +110,7 @@ void Player::collide(Roomba *r, Level * const l)
                 r->setHealth(r->getHealth()-1);
                 r->setVectorX(0);
                 setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
+                r->setIntangible(constants::FPS_CALCULATION/6);
             }
             else {
                 setHealth(getHealth()-1);
@@ -131,6 +133,7 @@ void Player::collide(Roomba *r, Level * const l)
                     if(player.bottom() < roomba.bottom()) {
                         r->setVectorX(0);
                         setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
+                        r->setIntangible(constants::FPS_CALCULATION/6);
                     }
                     else {
                         setHealth(getHealth()-1);
@@ -180,7 +183,9 @@ void Player::collide(LuckyBlock *lb, Level * const l)
     else {
         setPosTmp(getPosTmp().left(), lucky.bottom());
         setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
-        lb->dropItem(l);
+        if(getVectorY() < 0) {
+            lb->dropItem(l);
+        }
     }
     validatePos();
 
@@ -188,12 +193,11 @@ void Player::collide(LuckyBlock *lb, Level * const l)
 
 void Player::collide(PowerUp * pu, Level * const l)
 {
-    if(pu->getIntangible()==0) {
+    if(getHealth() < 1) {
         setHealth(1);
         healthChanged();
-        pu->setHealth(-1);
-        pu->setIntangible(constants::FPS_CALCULATION*3);
     }
+    pu->setHealth(-1);
 }
 
 void Player::collide(MovingPlatform *mp, Level * const l)
@@ -207,6 +211,54 @@ void Player::collide(MovingPlatform *mp, Level * const l)
         setOnSolid(true);
         validatePos();
     }
+}
+
+void Player::collide(Brick * b, Level * const l)
+{
+    QRectF pos = getHitbox();
+    QRectF brick = b->getHitbox();
+    setPosTmp(pos.left(), pos.top());
+    int direction;
+    int leftdir = abs(pos.right() - brick.left());
+    int topdir = abs(pos.bottom() - brick.top());
+    int rightdir = abs(pos.left() - brick.right());
+    int botdir = abs(pos.top() - brick.bottom());
+    if(leftdir <= topdir && leftdir <= rightdir && leftdir <= botdir) {
+        direction = 1;
+    } else if (topdir <= leftdir && topdir <= rightdir && topdir <= botdir){
+        direction = 2;
+    } else if (rightdir <= leftdir && rightdir <= topdir && rightdir <= botdir) {
+        direction = 3;
+    } else {
+        direction = 4;
+    }
+
+    //Gauche
+    if(direction == 1) {
+        setPosTmp(brick.left()-getHitbox().width(),getPosTmp().top());
+    }
+    //Haut
+    else if (direction == 2) {
+        setPosTmp(getPosTmp().left(), brick.top()-getHitbox().height());
+        setOnSolid(true);
+    }
+    //Droite
+    else if (direction == 3) {
+        setPosTmp(brick.right(), getPosTmp().top());
+    }
+    //Bas
+    else {
+        setPosTmp(getPosTmp().left(), brick.bottom());
+        setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
+        if(getVectorY() < 0) {
+            b->jump();
+            if(getHealth() > 0) {
+                b->setHealth(-1);
+            }
+        }
+
+    }
+    validatePos();
 }
 
 

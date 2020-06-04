@@ -75,20 +75,12 @@ void Roomba::collide(LuckyBlock * lb, Level * const l)
     int botdir = abs(pos.top() - lucky.bottom());
     if(leftdir <= topdir && leftdir <= rightdir && leftdir <= botdir) {
         direction = 1;
-        qDebug() << "touched from left by roomba";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     } else if (topdir <= leftdir && topdir <= rightdir && topdir <= botdir){
         direction = 2;
-        qDebug() << "touched from top by roomba";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     } else if (rightdir <= leftdir && rightdir <= topdir && rightdir <= botdir) {
         direction = 3;
-        qDebug() << "touched from right by roomba";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     } else {
         direction = 4;
-        qDebug() << "touched from bot by roomba";
-        qDebug() << leftdir << topdir << rightdir << botdir;
     }
 
     //Gauche
@@ -124,7 +116,7 @@ void Roomba::collide(LuckyBlock * lb, Level * const l)
 
 void Roomba::collide(Roomba *r, Level * const l)
 {
-    if(getIntangible() == 0 && r->getIntangible() == 0) {
+    if(getIntangible() == 0 && r->getIntangible() == 0 && getHealth() >= 0 && r->getHealth() >= 0) {
         if(getHealth() == r->getHealth()) {
             setVectorX(-getVectorX());
             setIntangible(5);
@@ -133,15 +125,31 @@ void Roomba::collide(Roomba *r, Level * const l)
             r->setIntangible(5);
             r->setFacingBack(!r->getFacingBack());
         } else if(getHealth() > r->getHealth()) {
-            setHealth(-1);
-            setVectorX(0);
-            setIntangible(3600);
+            if(r->getVectorX() != 0) {
+                setHealth(-1);
+                setVectorX(0);
+            } else {
+                setVectorX(-getVectorX());
+                setIntangible(5);
+                setFacingBack(!getFacingBack());
+            }
         } else {
-            r->setHealth(-1);
-            r->setVectorX(0);
-            r->setIntangible(3600);
+            if(getVectorX() != 0) {
+                r->setHealth(-1);
+                r->setVectorX(0);
+            }
+            else {
+                r->setVectorX(-r->getVectorX());
+                r->setIntangible(5);
+                r->setFacingBack(!r->getFacingBack());
+            }
         }
     }
+}
+
+void Roomba::collide(Brick *b, Level * const l)
+{
+
 }
 
 void Roomba::endTurn()

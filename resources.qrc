@@ -48,5 +48,6 @@
         <file>sprites/bg_menu.png</file>
         <file>sprites/Platformx2.png</file>
         <file>sprites/Platformx3.png</file>
+        <file>sprites/Brick.png</file>
     </qresource>
 </RCC>

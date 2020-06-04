@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     animation.cpp \
+    brick.cpp \
     calculatethread.cpp \
     checkpoint.cpp \
     drawthread.cpp \
@@ -41,6 +42,7 @@ SOURCES += \
 
 HEADERS += \
     animation.h \
+    brick.h \
     calculatethread.h \
     checkpoint.h \
     drawthread.h \

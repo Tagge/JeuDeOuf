@@ -36,13 +36,11 @@ MovingPlatform::MovingPlatform(int startx, int starty, int endx, int endy, int s
 
 void MovingPlatform::update(Level * const level)
 {
-    qDebug() << "before" << steppedOnBy.size();
     for(int i = 0; i<steppedOnBy.size(); i++) {
         if(steppedOnBy[i]->getHitbox().bottom() - getHitbox().top() > 5 || steppedOnBy[i]->getHitbox().bottom() - getHitbox().top() < -5) {
             steppedOnBy.remove(i);
         }
     }
-    qDebug() << "after" << steppedOnBy.size();
 
     if(started == false) {
         double xdif = startx - endx;

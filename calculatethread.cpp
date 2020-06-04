@@ -24,21 +24,21 @@ void CalculateThread::run()
 
 void CalculateThread::doCalculations()
 {
+    qDebug() << "calcStart";
     QMutex mutex;
     if(game->getLvl()->getTerminate()) {
         return;
     }
     if(game->getLvl()->getPlayer()->getIsDead()){
-        mutex.lock();
+        mutex.try_lock();
         game->getLvl()->setTerminate(true);
         mutex.unlock();
         return;
     }
     int size = game->getLvl()->getNbEntities();
     for(int idEntity = 0; idEntity < size; idEntity++){
-        int left = game->getLvl()->getEntity(idEntity)->getHitbox().left();
         if(game->getLvl()->getEntity(idEntity)->getIsDead()){
-            mutex.lock();
+            mutex.try_lock();
             delete game->getLvl()->getEntity(idEntity);
             game->getLvl()->removeEntity(idEntity);
             idEntity--;
@@ -50,13 +50,13 @@ void CalculateThread::doCalculations()
     for(int idEntity = 0; idEntity < size; idEntity++){
         int left = game->getLvl()->getEntity(idEntity)->getHitbox().left();
         if(left >= xPlayer-(constants::TILE_WIDTH*10) && left <= xPlayer+(constants::TILE_WIDTH*10) && !game->getLvl()->getWin()){
-            mutex.lock();
+            mutex.try_lock();
             game->getLvl()->getEntity(idEntity)->update(game->getLvl());
             mutex.unlock();
         }
     }
     for(int idEntity = 0; idEntity < size; idEntity++){
-        mutex.lock();
+        mutex.try_lock();
         QVector<LivingEntity *> colliding = game->getLvl()->getEntity(idEntity)->getCollidingEntities(idEntity, game->getLvl());
         for(int i=0; i<colliding.size(); i++) {
             game->getLvl()->getEntity(idEntity)->collide(colliding[i], game->getLvl());
@@ -65,7 +65,7 @@ void CalculateThread::doCalculations()
         mutex.unlock();
     }
     for(int idEntity = 0; idEntity < size; idEntity++){
-        mutex.lock();
+        mutex.try_lock();
         game->getLvl()->getEntity(idEntity)->endTurn();
         mutex.unlock();
     }
@@ -73,8 +73,9 @@ void CalculateThread::doCalculations()
     int center = game->getLvl()->getXWindow()+halfWidth;
     xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
     if(xPlayer > center){
-        mutex.lock();
+        mutex.try_lock();
         game->getLvl()->setXWindow(xPlayer-halfWidth);
         mutex.unlock();
     }
+    qDebug() << "calcFin";
 }

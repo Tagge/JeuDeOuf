@@ -32,7 +32,7 @@ private:
     QTimer timer;
     QString levelPath;
     Overlay overlay;
-    int overCount;
+    int overCount = 0;
 public:
     GameWindow(QWidget *parent = nullptr);
     ~GameWindow();

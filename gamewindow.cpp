@@ -60,6 +60,17 @@ void GameWindow::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     if(inGame){
         QMutex mutex;
+        if(lvl->getTerminate() && lvl->getPlayer()->getLivesLeft() != 0) {
+            mutex.try_lock();
+            LevelTimer * timer = lvl->getTimer();
+            int livesLeft = lvl->getPlayer()->getLivesLeft();
+            delete(lvl);
+            lvl = new Level(getLevelPath(), livesLeft, timer);
+            timer->setLvl(lvl);
+            int yWindow = lvl->getYWindow();
+            lvl->setYWindow(yWindow-getHeightOrigin());
+            mutex.unlock();
+        }
         double ratioWidth = width()/widthOrigin;
         double ratioHeight = height()/heightOrigin;
         //Paint the map
@@ -67,7 +78,7 @@ void GameWindow::paintEvent(QPaintEvent *e)
         int nbCols = lvl->getNbCols();
         for(int row = 0; row < nbRows; row++){
             for(int col = 0; col < nbCols; col++){
-                mutex.lock();
+                mutex.try_lock();
                 Tile * tile = lvl->getTile(row, col);
                 QRect rect = tile->getPos();
                 int x  = (rect.left()-lvl->getXWindow())*ratioWidth;
@@ -76,7 +87,6 @@ void GameWindow::paintEvent(QPaintEvent *e)
                 mutex.unlock();
             }
         }
-        mutex.lock();
         if(lvl->getTerminate() && lvl->getPlayer()->getLivesLeft() == 0) {
             if(overCount < 300) {
                 Text gameOver("Game Over", (widthOrigin/3)*ratioWidth, (heightOrigin/2)*ratioHeight, 40, "Super Mario 256", "red");
@@ -89,9 +99,8 @@ void GameWindow::paintEvent(QPaintEvent *e)
                 return;
             }
         }
-        mutex.unlock();
         //Paint the entities
-        mutex.lock();
+        mutex.try_lock();
         int size = lvl->getNbEntities();
         for(int idEntity = 0; idEntity < size; idEntity++){
             LivingEntity * entity = lvl->getEntity(idEntity);
@@ -105,7 +114,7 @@ void GameWindow::paintEvent(QPaintEvent *e)
             animation->iterate();
         }
         //Paint the overlay
-        mutex.lock();
+        mutex.try_lock();
         overlay.update(lvl);
         for(auto & x : overlay.getAllTexts()) {
             int topLeftX = x.getX() * ratioWidth;
@@ -118,6 +127,7 @@ void GameWindow::paintEvent(QPaintEvent *e)
 
     }
     else{
+        ui->levelTest->show();
         QPixmap pix(":/sprites/bg_menu");
         int y = heightOrigin-135*constants::TILE_HEIGHT/16.0;
         qDebug() << y;
@@ -127,8 +137,6 @@ void GameWindow::paintEvent(QPaintEvent *e)
 
 void GameWindow::keyPressEvent(QKeyEvent *event)
 {
-    QMutex mutex;
-    //mutex.lock();
     if(inGame){
         if(event->key() == Qt::Key_Left){
             lvl->setKey(0, true);
@@ -140,8 +148,6 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
             lvl->setKey(2, true);
         }
     }
-
-    //mutex.unlock();
 }
 
 void GameWindow::keyReleaseEvent(QKeyEvent * event)

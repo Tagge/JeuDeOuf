@@ -86,11 +86,35 @@ Level::Level()
     keys.push_back(false);
 }
 
+Level::~Level() {
+    for(int i = 0; i<map.size(); i++) {
+        for(int k = 0; k<map[i].size(); k++) {
+            delete(map[i][k]);
+        }
+    }
+    for(int i = 0; i<livingEntities.size(); i++) {
+        delete(livingEntities[i]);
+    }
+    for(auto const& x : animationsMap) {
+        delete(x);
+    }
+
+}
+
 void Level::setTimeElapsed(bool value) {
     timeElapsed = value;
     if(timeElapsed == true) {
         player->setHealth(-1);
     }
+}
+
+Level::Level(QString levelFileName, int livesLeft, LevelTimer * timer) : Level::Level(levelFileName, livesLeft) {
+    lvlTimer->terminate();
+    lvlTimer = timer;
+}
+
+Level::Level(QString levelFileName, int livesLeft) : Level::Level(levelFileName) {
+   player->setLivesLeft(livesLeft);
 }
 
 Level::Level(QString levelFileName)

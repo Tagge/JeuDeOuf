@@ -29,6 +29,7 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
     setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setJumpTime(0);
+    livesLeft = 3;
 }
 
 void Player::update(Level * const level)
@@ -36,12 +37,19 @@ void Player::update(Level * const level)
     if(getHealth() == -1) {
         setLivesLeft(getLivesLeft()-1);
         if(getLivesLeft() == 0) {
+            qDebug("Game over");
             //doSomethingToEndTheGame
         }
-        level->setXWindow(0);
-        setPosTmp(96, 480);
-        setHealth(0);
-        validatePos();
+        level->setTerminate(true);
+        return;
+    }
+    if(getFallingTime() > 100 && getHealth() >= 0) {
+        setLivesLeft(getLivesLeft()-1);
+        if(getLivesLeft() == 0) {
+            qDebug("Game over");
+            //doSomethingToEndTheGame
+        }
+        level->setTerminate(true);
         return;
     }
     if(underCeiling(level)){
@@ -86,17 +94,7 @@ void Player::update(Level * const level)
     else if(getFallingTime() > 0){
         fall();
     }
-    if(getFallingTime() > 100 && getHealth() == 0) {
-        level->setXWindow(0);
-        setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            //doSomethingToEndTheGame
-        }
-        setPosTmp(96, 480);
-        setHealth(0);
-        validatePos();
-        return;
-    }
+
     QRect limit(level->getXWindow(), 0, level->getNbCols()*constants::TILE_WIDTH-level->getXWindow(), level->getNbRows()*constants::TILE_HEIGHT);
     move(level, limit);
 }
@@ -292,4 +290,3 @@ void Player::healthChanged()
     }
 
 }
-

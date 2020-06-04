@@ -11,13 +11,14 @@ class Animation
 {
 private:
     QVector<QPixmap*> images;
-    QVector<QPixmap*> * imagesReverse;
+    QVector<QPixmap*> * imagesReverse = nullptr;
     unsigned int frameDuration;
     unsigned int iteration;
     unsigned int nbIteration;
     bool reversed = false;
 public:
     Animation();
+    ~Animation();
     inline QPixmap* getSprite() const {return images[iteration/frameDuration];};
     inline QPixmap* getReversedSprite() const {return (*imagesReverse)[iteration/frameDuration];};
     void addImage(QPixmap* pixmap);

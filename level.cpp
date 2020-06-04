@@ -6,6 +6,7 @@
 #include "endgate.h"
 #include "spawngate.h"
 #include "leveltimer.h"
+#include "movingplatform.h"
 #include <QDebug>
 #include <QFile>
 #include <QJsonArray>
@@ -166,6 +167,16 @@ Level::Level(QString levelFileName)
         lvlTimer = new LevelTimer();
         lvlTimer->setLvl(this);
         lvlTimer->start();
+        Animation * animationmp = new Animation();
+        QPixmap * mppix = new QPixmap(":/sprites/Platformx2");
+        animationmp->addImage(mppix);
+        Animation * animationmp2 = new Animation();
+        QPixmap * mppix2 = new QPixmap(":/sprites/Platformx3");
+        animationmp2->addImage(mppix2);
+        animationsMap.insert("platform2", animationmp);
+        animationsMap.insert("platform3", animationmp2);
+        MovingPlatform * mp = new MovingPlatform(10,2,6,4,2,animationsMap);
+        livingEntities.push_back(mp);
     }
     else{
         qDebug() << "File not found";
@@ -214,6 +225,12 @@ void Level::addAnimationFromJson(const QJsonObject &object)
     else if(entityName == "SpawnGate"){
         QJsonArray endGate = object["spawn_gate"].toArray();
         addAnimation(endGate, "spawn_gate");
+    }
+    else if(entityName == "Platform"){
+        QJsonArray platform2 = object["platform2"].toArray();
+        addAnimation(platform2, "spawn_gate");
+        QJsonArray platform3 = object["platform3"].toArray();
+        addAnimation(platform3, "spawn_gate");
     }
 }
 

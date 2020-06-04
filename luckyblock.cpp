@@ -25,9 +25,11 @@ LuckyBlock::LuckyBlock(int x, int y, const QMap<QString, Animation *> &animation
 
 void LuckyBlock::update(Level * const level)
 {
-    if(activatedFor == 5) {
+    if(activatedFor == 6) {
         setVectorY(-getVectorY());
     }
+    QRect limit(0, 0, level->getNbCols()*constants::TILE_WIDTH, level->getNbRows()*constants::TILE_HEIGHT);
+    move(level, limit);
     if(activatedFor == 10) {
         setVectorY(0);
         setAnimPos(1);
@@ -35,8 +37,6 @@ void LuckyBlock::update(Level * const level)
     if(activatedFor>0 && activatedFor<10) {
         activatedFor++;
     }
-    QRect limit(0, 0, level->getNbCols()*constants::TILE_WIDTH, level->getNbRows()*constants::TILE_HEIGHT);
-    move(level, limit);
 }
 
 void LuckyBlock::collide(LivingEntity *e, Level * const l)

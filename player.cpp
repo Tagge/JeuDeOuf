@@ -5,6 +5,7 @@
 #include "roomba.h"
 #include "luckyblock.h"
 #include "powerup.h"
+#include "movingplatform.h"
 #include <stdlib.h>
 
 Player::Player():GroundEntity(0, 0)
@@ -32,6 +33,17 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
 
 void Player::update(Level * const level)
 {
+    if(getHealth() == -1) {
+        setLivesLeft(getLivesLeft()-1);
+        if(getLivesLeft() == 0) {
+            //doSomethingToEndTheGame
+        }
+        level->setXWindow(0);
+        setPosTmp(96, 480);
+        setHealth(0);
+        validatePos();
+        return;
+    }
     if(underCeiling(level)){
         setJumpTime(getJumpTop() * constants::FPS_CALCULATION + 1);
     }
@@ -41,7 +53,7 @@ void Player::update(Level * const level)
     if(getIntangible() > 0) {
         setIntangible((getIntangible()-1));
     }
-
+    setAnimPos(getHealth()*3);
     if(level->getKey(0)){
         double x = getVectorX();
         setVectorX(x-getAccel());
@@ -74,18 +86,6 @@ void Player::update(Level * const level)
     else if(getFallingTime() > 0){
         fall();
     }
-    if(getHealth() == -1) {
-        setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            //doSomethingToEndTheGame
-        }
-        level->setXWindow(0);
-        setPosTmp(96, 480);
-        setHealth(0);
-        validatePos();
-        return;
-
-    }
     if(getFallingTime() > 100 && getHealth() == 0) {
         level->setXWindow(0);
         setLivesLeft(getLivesLeft()-1);
@@ -97,7 +97,6 @@ void Player::update(Level * const level)
         validatePos();
         return;
     }
-    setAnimPos(getHealth()*3);
     QRect limit(level->getXWindow(), 0, level->getNbCols()*constants::TILE_WIDTH-level->getXWindow(), level->getNbRows()*constants::TILE_HEIGHT);
     move(level, limit);
 }
@@ -120,7 +119,7 @@ void Player::collide(Roomba *r, Level * const l)
             }
             else {
                 setHealth(getHealth()-1);
-                setIntangible(constants::FPS_CALCULATION/6);
+                setIntangible(constants::FPS_CALCULATION/2);
                 healthChanged();
             }
         } else {
@@ -142,7 +141,7 @@ void Player::collide(Roomba *r, Level * const l)
                     }
                     else {
                         setHealth(getHealth()-1);
-                        setIntangible(constants::FPS_CALCULATION/4);
+                        setIntangible(constants::FPS_CALCULATION/2);
                         healthChanged();
                     }
                 }
@@ -201,6 +200,16 @@ void Player::collide(PowerUp * pu, Level * const l)
         healthChanged();
         pu->setHealth(-1);
         pu->setIntangible(constants::FPS_CALCULATION*3);
+    }
+}
+
+void Player::collide(MovingPlatform *mp, Level * const l)
+{
+    if(mp->getHitbox().bottom() > getHitbox().bottom() && getVectorY() > 0) {
+        if(mp->getSteppedOnBy().indexOf(this) == -1) {
+            mp->stepOn(this);
+        }
+        setOnSolid(true);
     }
 }
 

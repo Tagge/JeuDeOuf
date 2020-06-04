@@ -28,6 +28,7 @@ SOURCES += \
     luckyblock.cpp \
     main.cpp \
     gamewindow.cpp \
+    movingplatform.cpp \
     overlay.cpp \
     player.cpp \
     powerup.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     leveltimer.h \
     livingentity.h \
     luckyblock.h \
+    movingplatform.h \
     overlay.h \
     player.h \
     powerup.h \

@@ -9,6 +9,7 @@ class Roomba;
 class LuckyBlock;
 class PowerUp;
 class EndGate;
+class MovingPlatform;
 class Level;
 
 class LivingEntity: public Entity
@@ -34,7 +35,7 @@ public:
     inline double getVectorY() const {return vectorY;};
     inline void setVectorY(double value) {vectorY = value;};
     inline QRectF getPosTmp() const {return posTmp;};
-    inline void setPosTmp(int x, int y) {posTmp = QRectF(x, y, getHitbox().width(), getHitbox().height());};
+    inline void setPosTmp(double x, double y) {posTmp = QRectF(x, y, getHitbox().width(), getHitbox().height());};
     virtual void endTurn() = 0;
     inline double getMaxSpeed() {return maxSpeed;};
     inline double getAccel() {return acceleration;};
@@ -45,7 +46,8 @@ public:
     inline virtual void collide(Roomba * r, Level * const l) {};
     inline virtual void collide(LuckyBlock * lb, Level * const l) {};
     inline virtual void collide(PowerUp * pu, Level * const l) {};
-    virtual void collide(EndGate * eg, Level * const l) {};
+    inline virtual void collide(MovingPlatform * mp, Level * const l) {};
+    inline virtual void collide(EndGate * eg, Level * const l) {};
     double getHealth() const;
     void setHealth(double value);
     int getIntangible() const;

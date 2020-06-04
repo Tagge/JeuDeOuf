@@ -8,6 +8,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include "overlay.h"
 
 class DrawThread;
 class CalculateThread;
@@ -30,7 +31,8 @@ private:
     CalculateThread * calculateThread;
     QTimer timer;
     QString levelPath;
-
+    Overlay overlay;
+    int overCount;
 public:
     GameWindow(QWidget *parent = nullptr);
     ~GameWindow();
@@ -41,6 +43,7 @@ public:
     //Getters and setters
     inline Level *getLvl() const {return lvl;};
     inline double getWidthOrigin() const {return widthOrigin;};
+    inline Overlay getOverlay() {return overlay;};
     void calculate();
 
 private slots:

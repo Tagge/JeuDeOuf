@@ -35,19 +35,11 @@ void Player::update(Level * const level)
 {
     if(getHealth() == -1) {
         setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            qDebug("Game over");
-            //doSomethingToEndTheGame
-        }
         level->setTerminate(true);
         return;
     }
     if(getFallingTime() > 100 && getHealth() >= 0) {
         setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            qDebug("Game over");
-            //doSomethingToEndTheGame
-        }
         level->setTerminate(true);
         return;
     }

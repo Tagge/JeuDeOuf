@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fonts/SuperMario256.ttf</file>
+    </qresource>
+</RCC>

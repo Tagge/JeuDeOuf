@@ -44,6 +44,8 @@ public:
     inline bool getTerminate() {return terminate;};
     inline void setTerminate(bool value) {terminate = value;};
     inline LevelTimer * getTimer() {return lvlTimer;};
+    inline void setLevelId(int value) {levelId = value;};
+    inline int getLevelId() {return levelId;};
 
 private:
     QMap<QString, Animation*> animationsMap;
@@ -60,6 +62,7 @@ private:
     bool win = false;
     LevelTimer * lvlTimer;
     bool terminate = false;
+    int levelId;
 };
 
 #endif // LEVEL_H

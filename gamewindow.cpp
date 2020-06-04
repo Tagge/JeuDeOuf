@@ -20,6 +20,7 @@ GameWindow::GameWindow(QWidget *parent)
     drawThread->setGame(this);
     calculateThread = new CalculateThread();
     calculateThread->setGame(this);
+    overlay = Overlay();
     connect(ui->levelTest, SIGNAL(clicked()), this, SLOT(createGame()));
     /*timer.setTimerType(Qt::PreciseTimer);
     connect(&timer, SIGNAL(timeout()), this, SLOT(gameLoop()));
@@ -57,7 +58,7 @@ void GameWindow::gameLoop()
 void GameWindow::paintEvent(QPaintEvent *e)
 {
     if(inGame){
-        if(lvl->getTerminate()) {
+        if(lvl->getTerminate() && lvl->getPlayer()->getLivesLeft() != 0) {
             LevelTimer * timer = lvl->getTimer();
             int livesLeft = lvl->getPlayer()->getLivesLeft();
             delete(lvl);
@@ -84,6 +85,20 @@ void GameWindow::paintEvent(QPaintEvent *e)
                 mutex.unlock();
             }
         }
+        mutex.lock();
+        if(lvl->getTimer() && lvl->getPlayer()->getLivesLeft() == 0) {
+            if(overCount < 300) {
+                Text gameOver("Game Over", (widthOrigin/3)*ratioWidth, (heightOrigin/2)*ratioHeight, 40, "Super Mario 256", "red");
+                painter.drawPixmap(gameOver.getX(), gameOver.getY(), gameOver.getWidth()*ratioWidth, gameOver.getHeight()*ratioHeight, gameOver.getImage());
+                overCount++;
+                return;
+            } else {
+                inGame = false;
+                overCount = 0;
+                return;
+            }
+        }
+        mutex.unlock();
         //Paint the entities
         mutex.lock();
         int size = lvl->getNbEntities();
@@ -98,6 +113,18 @@ void GameWindow::paintEvent(QPaintEvent *e)
         for(Animation * animation : lvl->getAnimationMap()){
             animation->iterate();
         }
+        //Paint the overlay
+        mutex.lock();
+        overlay.update(lvl);
+        for(auto & x : overlay.getAllTexts()) {
+            int topLeftX = x.getX() * ratioWidth;
+            int topLeftY = x.getY() * ratioHeight;
+            int height = x.getHeight() * ratioHeight;
+            int width = x.getWidth() * ratioWidth;
+            painter.drawPixmap(topLeftX, topLeftY, width, height, x.getImage());
+        }
+        mutex.unlock();
+
     }
 }
 

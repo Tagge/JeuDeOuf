@@ -3,8 +3,6 @@
 
 #include "livingentity.h"
 
-
-
 class SpawnGate: public LivingEntity
 {
 public:

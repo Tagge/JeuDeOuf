@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     animation.cpp \
     calculatethread.cpp \
+    checkpoint.cpp \
     drawthread.cpp \
     endgate.cpp \
     entity.cpp \
@@ -41,6 +42,7 @@ SOURCES += \
 HEADERS += \
     animation.h \
     calculatethread.h \
+    checkpoint.h \
     drawthread.h \
     endgate.h \
     entity.h \

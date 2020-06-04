@@ -12,6 +12,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include "checkpoint.h"
 
 
 
@@ -111,9 +112,12 @@ void Level::setTimeElapsed(bool value) {
     }
 }
 
-Level::Level(QString levelFileName, int livesLeft, LevelTimer * timer) : Level::Level(levelFileName, livesLeft) {
+Level::Level(QString levelFileName, int livesLeft, LevelTimer * timer, bool check) : Level::Level(levelFileName, livesLeft) {
     lvlTimer->terminate();
     lvlTimer = timer;
+    if(check){
+        player->setPosTmp(checkpoint->getXCheckpoint(), player->getHitbox().top());
+    }
 }
 
 Level::Level(QString levelFileName, int livesLeft) : Level::Level(levelFileName) {
@@ -263,6 +267,12 @@ void Level::addAnimationFromJson(const QJsonObject &object)
             livingEntities.push_back(new MovingPlatform(xStarts[platform].toInt(), yStarts[platform].toInt(), xEnds[platform].toInt(), yEnds[platform].toInt(), sizes[platform].toInt(), animationsMap));
         }
     }
+    else if(entityName == "Checkpoint"){
+        QJsonArray checkpointOn = object["checkpoint_on"].toArray();
+        addAnimation(checkpointOn, "checkpoint_on");
+        QJsonArray checkpointOff = object["checkpoint_off"].toArray();
+        addAnimation(checkpointOff, "checkpoint_off");
+    }
 }
 
 void Level::addAnimation(const QJsonArray &images, QString name)
@@ -293,5 +303,9 @@ void Level::createEntityFromJson(QString name, int x, int y, const QJsonObject &
     }
     else if(name == "SpawnGate"){
         livingEntities.push_back(new SpawnGate(x, y, animationsMap));
+    }
+    else if(name == "Checkpoint"){
+        checkpoint = new Checkpoint(x, y, animationsMap);
+        livingEntities.push_back(checkpoint);
     }
 }

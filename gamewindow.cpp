@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QKeyEvent>
+#include "checkpoint.h"
 
 GameWindow::GameWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -64,8 +65,9 @@ void GameWindow::paintEvent(QPaintEvent *e)
             mutex.try_lock();
             LevelTimer * timer = lvl->getTimer();
             int livesLeft = lvl->getPlayer()->getLivesLeft();
+            bool checkpoint = lvl->getCheckpoint()->isChecked();
             delete(lvl);
-            lvl = new Level(getLevelPath(), livesLeft, timer);
+            lvl = new Level(getLevelPath(), livesLeft, timer, checkpoint);
             timer->setLvl(lvl);
             int yWindow = lvl->getYWindow();
             lvl->setYWindow(yWindow-getHeightOrigin());

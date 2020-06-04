@@ -6,6 +6,7 @@
 #include <QTime>
 #include "player.h"
 #include "header.h"
+#include "checkpoint.h"
 
 CalculateThread::CalculateThread()
 {
@@ -72,6 +73,10 @@ void CalculateThread::doCalculations()
     int halfWidth = game->getWidthOrigin()/2;
     int center = game->getLvl()->getXWindow()+halfWidth;
     xPlayer = game->getLvl()->getPlayer()->getHitbox().left();
+    if(xPlayer > game->getLvl()->getCheckpoint()->getXCheckpoint()){
+        game->getLvl()->getCheckpoint()->setChecked(true);
+        game->getLvl()->getCheckpoint()->setAnimPos(1);
+    }
     if(xPlayer > center){
         mutex.try_lock();
         game->getLvl()->setXWindow(xPlayer-halfWidth);

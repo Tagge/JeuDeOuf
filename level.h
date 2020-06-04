@@ -8,6 +8,7 @@
 
 class LivingEntity;
 class Player;
+class Checkpoint;
 class LevelTimer;
 
 class Level
@@ -17,7 +18,7 @@ public:
     ~Level();
     Level(QString levelFileName);
     Level(QString levelFileName, int livesLeft);
-    Level(QString levelFileName, int livesLeft, LevelTimer * timer);
+    Level(QString levelFileName, int livesLeft, LevelTimer * timer, bool check = false);
     void addAnimationFromJson(const QJsonObject & object);
     void addAnimation(const QJsonArray & images, QString name);
     void createEntityFromJson(QString name, int x, int y, const QJsonObject & param);
@@ -47,6 +48,7 @@ public:
     inline LevelTimer * getTimer() {return lvlTimer;};
     inline void setLevelId(int value) {levelId = value;};
     inline int getLevelId() {return levelId;};
+    inline Checkpoint * getCheckpoint() const {return checkpoint;};
 
 private:
     QMap<QString, Animation*> animationsMap;
@@ -64,6 +66,7 @@ private:
     LevelTimer * lvlTimer;
     bool terminate = false;
     int levelId;
+    Checkpoint * checkpoint;
 };
 
 #endif // LEVEL_H

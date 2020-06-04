@@ -29,6 +29,9 @@ void CalculateThread::doCalculations()
     if(game->getLvl()->getWin()) {
         return;
     }
+    if(!game->getIngame()) {
+        return;
+    }
     if(game->getLvl()->getTerminate()) {
         return;
     }

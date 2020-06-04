@@ -119,7 +119,8 @@ Level::Level(QString levelFileName, int livesLeft, LevelTimer * timer, bool chec
     lvlTimer = timer;
     qDebug() << check;
     if(check){
-        player->setPosTmp(checkpoint->getXCheckpoint(), player->getHitbox().top());
+        player->setPosTmp(checkpoint->getXCheckpoint()+player->getHitbox().width(), player->getHitbox().top());
+        checkpoint->setChecked(true);
         player->validatePos();
     }
 }

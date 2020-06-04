@@ -29,7 +29,7 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
     setAccel(getAccel()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setMaxSpeed(getMaxSpeed()*constants::TILE_WIDTH/constants::FPS_CALCULATION);
     setJumpTime(0);
-    livesLeft = 3;
+    livesLeft = 60;
 }
 
 void Player::update(Level * const level)

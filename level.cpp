@@ -163,6 +163,9 @@ Level::Level(QString levelFileName)
         QJsonObject player = level["player"].toObject();
         addAnimationFromJson(player);
         createEntityFromJson("Player", player["x"].toInt(), player["y"].toInt(), QJsonObject());
+        lvlTimer = new LevelTimer();
+        lvlTimer->setLvl(this);
+        lvlTimer->start();
     }
     else{
         qDebug() << "File not found";

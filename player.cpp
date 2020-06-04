@@ -79,6 +79,7 @@ void Player::update(Level * const level)
         if(getLivesLeft() == 0) {
             //doSomethingToEndTheGame
         }
+        level->setXWindow(0);
         setPosTmp(96, 480);
         setHealth(0);
         validatePos();
@@ -86,7 +87,7 @@ void Player::update(Level * const level)
 
     }
     if(getFallingTime() > 100 && getHealth() == 0) {
-        level->setXWindow(1);
+        level->setXWindow(0);
         setLivesLeft(getLivesLeft()-1);
         if(getLivesLeft() == 0) {
             //doSomethingToEndTheGame

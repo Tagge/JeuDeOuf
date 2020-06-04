@@ -100,7 +100,7 @@ Level::~Level() {
     for(auto const& x : animationsMap) {
         delete(x);
     }
-
+    lvlTimer->terminate();
 }
 
 void Level::setTimeElapsed(bool value) {

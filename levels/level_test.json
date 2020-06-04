@@ -83,7 +83,7 @@
       "platform2" : ["sprites/Platformx2"],
       "platform3" : ["sprites/Platformx3"],
       "parameters" : {
-        "x_start" : [5, 1],
+        "x_start" : [],
         "y_start" : [4, 3],
         "x_end" : [5, 7],
         "y_end" : [2, 5],

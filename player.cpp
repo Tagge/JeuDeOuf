@@ -36,12 +36,14 @@ void Player::update(Level * const level)
     if(getHealth() == -1) {
         setLivesLeft(getLivesLeft()-1);
         if(getLivesLeft() == 0) {
+            qDebug("Game over");
             //doSomethingToEndTheGame
         }
         level->setXWindow(0);
         setPosTmp(96, 480);
         setHealth(0);
         validatePos();
+        level->setTerminate(true);
         return;
 
     }
@@ -55,15 +57,6 @@ void Player::update(Level * const level)
         setPosTmp(96, 480);
         setHealth(0);
         validatePos();
-        level->setTerminate(true);
-        return;
-    }
-    if(getFallingTime() > 100 && getHealth() >= 0) {
-        setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            qDebug("Game over");
-            //doSomethingToEndTheGame
-        }
         level->setTerminate(true);
         return;
     }
@@ -248,7 +241,6 @@ void Player::move(Level * const level, QRect limit)
     QRectF pos = getHitbox();
     setPosTmp(pos.left()+(int)getVectorX(), pos.top());
     if(getPosTmp().left() < limit.left()){
-        //qDebug() << getPosTmp().left() << " " << limit.left();
         setPosTmp(limit.left(), getPosTmp().top());
     }
     if(getPosTmp().right() > limit.right()){

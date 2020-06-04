@@ -183,9 +183,6 @@ Level::Level(QString levelFileName)
                     idEntity = entitiesRow[col].toInt();
                 }
                 if(idEntity > 0){
-                    if(!mapParameters[idEntity].isEmpty()){
-                        qDebug() << "no param";
-                    }
                     createEntityFromJson(mapEntities[idEntity], col, row, mapParameters[idEntity]);
                 }
             }

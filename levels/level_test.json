@@ -4,6 +4,7 @@
   "rows" : 12,
   "columns" : 60,
   "duration": 60000,
+  "id": 1,
   "tiles" : [
     {
       "id" : "0",

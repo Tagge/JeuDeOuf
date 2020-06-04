@@ -1,16 +1,21 @@
 #ifndef OVERLAY_H
 #define OVERLAY_H
 #include<QVector>
+#include<QMap>
+#include<QFontDatabase>
 #include "text.h"
+#include "leveltimer.h"
+
+class Level;
 
 class Overlay
 {
 private:
-    QVector<Text> allTexts;
+    QMap<QString, Text> allTexts;
 public:
     Overlay();
-    void update();
-    inline QVector<Text> getAllTexts() {return allTexts;};
+    void update(Level * lvl);
+    inline QMap<QString, Text> getAllTexts() {return allTexts;};
 };
 
 #endif // OVERLAY_H

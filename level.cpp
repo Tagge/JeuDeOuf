@@ -77,6 +77,8 @@ Level::Level()
     livingEntities.push_back(roomba);
     livingEntities.push_back(lb);
 
+    levelId = 1;
+
     lvlTimer = new LevelTimer();
     lvlTimer->setLvl(this);
     lvlTimer->start();
@@ -104,6 +106,7 @@ Level::~Level() {
 void Level::setTimeElapsed(bool value) {
     timeElapsed = value;
     if(timeElapsed == true) {
+        lvlTimer->setTimeBegin(std::chrono::steady_clock::now());
         player->setHealth(-1);
     }
 }
@@ -135,6 +138,7 @@ Level::Level(QString levelFileName)
         nbRows = level["rows"].toInt();
         nbCols = level["columns"].toInt();
         duration = level["duration"].toInt();
+        levelId = level["id"].toInt();
         xWindow = level["start_x"].toInt()*constants::TILE_WIDTH;
         yWindow = (nbRows-level["start_y"].toInt())*constants::TILE_HEIGHT;
         for(int row = 0; row < nbRows; row++){

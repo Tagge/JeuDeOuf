@@ -70,5 +70,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    fonts.qrc \
     resources.qrc \
     sprites_mock.qrc

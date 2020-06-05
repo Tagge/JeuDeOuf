@@ -129,7 +129,6 @@ void Level::verifyTime() {
 
 Level::Level(QString levelFileName, int livesLeft, std::chrono::time_point<std::chrono::steady_clock> beginDate, bool check) : Level::Level(levelFileName, livesLeft) {
     this->beginDate = beginDate;
-    qDebug() << check;
     if(check){
         player->setPosTmp(checkpoint->getXCheckpoint()+player->getHitbox().width(), player->getHitbox().top());
         checkpoint->setChecked(true);

@@ -117,9 +117,8 @@ void Level::setTimeElapsed(bool value) {
 }
 
 Level::Level(QString levelFileName, int livesLeft, LevelTimer * timer, bool check) : Level::Level(levelFileName, livesLeft) {
-    lvlTimer->quit(); 
+    lvlTimer->quit();
     lvlTimer = timer;
-    qDebug() << check;
     if(check){
         player->setPosTmp(checkpoint->getXCheckpoint(), player->getHitbox().top());
         player->validatePos();

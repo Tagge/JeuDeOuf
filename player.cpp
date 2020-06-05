@@ -39,7 +39,7 @@ void Player::update(Level * const level)
     if(getHealth() < 0){
         return;
     }
-    if(getFallingTime() > 100 && getHealth() >= 0) {
+    if(getHitbox().bottom()/constants::TILE_HEIGHT > level->getNbRows()-1) {
         setLivesLeft(getLivesLeft()-1);
         level->setTerminate(true);
         return;
@@ -200,7 +200,6 @@ void Player::collide(MovingPlatform *mp, Level * const l)
 {
     if((mp->getHitbox().bottom()+mp->getHitbox().top())/2 > getHitbox().bottom() && getVectorY() >= 0) {
         if(mp->getSteppedOnBy().indexOf(this) == -1) {
-            qDebug() << "step on";
             mp->stepOn(this);
         }
         setPosTmp(getHitbox().left(), mp->getHitbox().top() - getHitbox().height());

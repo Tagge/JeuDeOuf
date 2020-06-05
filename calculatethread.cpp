@@ -32,6 +32,7 @@ void CalculateThread::doCalculations()
     if(!game->getIngame()) {
       return;
     }
+
     if(game->getLvl()->getTerminate()) {
         return;
     }

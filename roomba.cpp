@@ -35,7 +35,7 @@ void Roomba::update(Level * const level)
     if(getHealth()<1) {
         setAnimPos(1);
     } else {
-        if(getHitbox().left() - level->getPlayer()->getHitbox().right() < 10*constants::TILE_WIDTH && started == 0) {
+        if(started == 0) {
             if(getFacingBack()) {
                 setVectorX(-0.025*constants::TILE_WIDTH);
             }

@@ -138,8 +138,8 @@
     }
   ],
   "player" : {
-    "x" : 136,
-    "y" : 2,
+    "x" : 130,
+    "y" : 6,
     "type" : "Player",
     "character" : ["sprites/character/Character_0004.png"],
     "character_jump" : ["sprites/character/Character_0000.png"],

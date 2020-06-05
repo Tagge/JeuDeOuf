@@ -21,7 +21,9 @@ GameWindow::GameWindow(QWidget *parent)
     calculateThread = new CalculateThread();
     calculateThread->setGame(this);
     overlay = Overlay();
-    connect(ui->levelTest, SIGNAL(clicked()), this, SLOT(createGame()));
+    connect(ui->buttonLevel1, SIGNAL(clicked()), this, SLOT(createGame1()));
+    connect(ui->buttonLevel2, SIGNAL(clicked()), this, SLOT(createGame2()));
+    connect(ui->buttonLevel3, SIGNAL(clicked()), this, SLOT(createGame3()));
 }
 
 GameWindow::~GameWindow()
@@ -31,9 +33,59 @@ GameWindow::~GameWindow()
 
 void GameWindow::createGame()
 {
-    ui->levelTest->hide();
-    lvl = new Level(":/levels/level_test.json");
-    levelPath = ":/levels/level_test.json";
+    ui->buttonLevel1->hide();
+    ui->buttonLevel2->hide();
+    ui->buttonLevel3->hide();
+    lvl = new Level(":/levels/level2.json");
+    levelPath = ":/levels/level2.json";
+    int yWindow = lvl->getYWindow();
+    lvl->setYWindow(yWindow-heightOrigin);
+    inGame = 1;
+    drawThread->start();
+    QThread::msleep(5);
+    calculateThread->start();
+    setFocus();
+}
+
+void GameWindow::createGame1()
+{
+    ui->buttonLevel1->hide();
+    ui->buttonLevel2->hide();
+    ui->buttonLevel3->hide();
+    lvl = new Level(":/levels/level1.json");
+    levelPath = ":/levels/level1.json";
+    int yWindow = lvl->getYWindow();
+    lvl->setYWindow(yWindow-heightOrigin);
+    inGame = 1;
+    drawThread->start();
+    QThread::msleep(5);
+    calculateThread->start();
+    setFocus();
+}
+
+void GameWindow::createGame2()
+{
+    ui->buttonLevel1->hide();
+    ui->buttonLevel2->hide();
+    ui->buttonLevel3->hide();
+    lvl = new Level(":/levels/level2.json");
+    levelPath = ":/levels/level2.json";
+    int yWindow = lvl->getYWindow();
+    lvl->setYWindow(yWindow-heightOrigin);
+    inGame = 1;
+    drawThread->start();
+    QThread::msleep(5);
+    calculateThread->start();
+    setFocus();
+}
+
+void GameWindow::createGame3()
+{
+    ui->buttonLevel1->hide();
+    ui->buttonLevel2->hide();
+    ui->buttonLevel3->hide();
+    lvl = new Level(":/levels/level3.json");
+    levelPath = ":/levels/level3.json";
     int yWindow = lvl->getYWindow();
     lvl->setYWindow(yWindow-heightOrigin);
     inGame = 1;
@@ -129,7 +181,9 @@ void GameWindow::paintEvent(QPaintEvent *e)
 
     }
     else{
-        ui->levelTest->show();
+        ui->buttonLevel1->show();
+        ui->buttonLevel2->show();
+        ui->buttonLevel3->show();
         QPixmap pix(":/sprites/bg_menu");
         painter.drawPixmap(0, 0, 1920, 1080, pix);
     }

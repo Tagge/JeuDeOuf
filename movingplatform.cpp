@@ -30,7 +30,7 @@ MovingPlatform::MovingPlatform(int startx, int starty, int endx, int endy, int s
         setAnimPos(0);
     } else if (size == 3) {
         addAnimation(animations["platform3"]);
-        setAnimPos(1);
+        setAnimPos(0);
     }
 }
 

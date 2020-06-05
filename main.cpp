@@ -13,8 +13,7 @@ int main(int argc, char *argv[])
                     "color: white; "
                     "font: serif;}"
                     "QPushButton:hover {"
-                    "background-color: #EF8A8A;"
-                    "cursor: pointer;}");
+                    "background-color: #EF8A8A;}");
     return a.exec();
 }
 

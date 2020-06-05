@@ -1,7 +1,6 @@
 #include "gamewindow.h"
 #include "player.h"
 #include "ui_gamewindow.h"
-#include "leveltimer.h"
 #include <QDebug>
 #include <QMutex>
 #include <QPainter>

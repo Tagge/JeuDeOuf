@@ -5,7 +5,6 @@
 #include "header.h"
 #include "endgate.h"
 #include "spawngate.h"
-#include "leveltimer.h"
 #include "movingplatform.h"
 #include "brick.h"
 #include "buzzer.h"

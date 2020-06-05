@@ -6,7 +6,6 @@ Overlay::Overlay()
 {
     int id = QFontDatabase::addApplicationFont(":/fonts/SuperMario256.ttf");
     QString fontName = QFontDatabase::applicationFontFamilies(id).at(0);
-    qDebug() << fontName;
     allTexts["health"] = Text("Vies : ♥♥♥", 40, 20, 30, fontName, "white");
     allTexts["level"] = Text("Niveau 1", 450, 20, 30, fontName, "white");
     allTexts["time"] = Text("60:00", 1000, 20, 30, fontName, "white");

@@ -36,15 +36,12 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
 
 void Player::update(Level * const level)
 {
+    qDebug() << getFallingTime();
     if(getHealth() < 0){
         return;
     }
-    if(getFallingTime() > 100 && getHealth() == 0) {
+    if(getHitbox().bottom()/constants::TILE_HEIGHT > level->getNbRows()-1) {
         setLivesLeft(getLivesLeft()-1);
-        if(getLivesLeft() == 0) {
-            qDebug("Game over");
-            //doSomethingToEndTheGame
-        }
         level->setTerminate(true);
         return;
     }

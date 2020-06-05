@@ -36,7 +36,6 @@ Player::Player(int x, int y, const QMap<QString, Animation *> &animations):Groun
 
 void Player::update(Level * const level)
 {
-    qDebug() << getFallingTime();
     if(getHealth() < 0){
         return;
     }
@@ -201,7 +200,6 @@ void Player::collide(MovingPlatform *mp, Level * const l)
 {
     if((mp->getHitbox().bottom()+mp->getHitbox().top())/2 > getHitbox().bottom() && getVectorY() >= 0) {
         if(mp->getSteppedOnBy().indexOf(this) == -1) {
-            qDebug() << "step on";
             mp->stepOn(this);
         }
         setPosTmp(getHitbox().left(), mp->getHitbox().top() - getHitbox().height());

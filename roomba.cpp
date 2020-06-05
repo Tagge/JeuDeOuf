@@ -30,7 +30,6 @@ void Roomba::update(Level * const level)
 {
     if(getHitbox().bottom()/constants::TILE_HEIGHT > level->getNbRows()-1) {
         setIsDead(true);
-        qDebug() << "die";
         return;
     }
     if(getHealth()<1) {

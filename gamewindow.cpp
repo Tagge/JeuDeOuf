@@ -22,9 +22,6 @@ GameWindow::GameWindow(QWidget *parent)
     calculateThread->setGame(this);
     overlay = Overlay();
     connect(ui->levelTest, SIGNAL(clicked()), this, SLOT(createGame()));
-    /*timer.setTimerType(Qt::PreciseTimer);
-    connect(&timer, SIGNAL(timeout()), this, SLOT(gameLoop()));
-    timer.start(16);*/
 }
 
 GameWindow::~GameWindow()
@@ -44,15 +41,6 @@ void GameWindow::createGame()
     QThread::msleep(5);
     calculateThread->start();
     setFocus();
-}
-
-//En cas de non Thread
-void GameWindow::gameLoop()
-{
-    if(inGame){
-        calculate();
-        repaint();
-    }
 }
 
 void GameWindow::paintEvent(QPaintEvent *e)
@@ -174,18 +162,6 @@ void GameWindow::keyReleaseEvent(QKeyEvent * event)
         if(event->key() == Qt::Key_Space){
             lvl->setKey(2, false);
         }
-    }
-}
-
-//En cas de non threads
-void GameWindow::calculate()
-{
-    int size = lvl->getNbEntities();
-    for(int idEntity = 0; idEntity < size; idEntity++){
-        lvl->getEntity(idEntity)->update(lvl);
-        lvl->setKey(0, false);
-        lvl->setKey(1, false);
-        lvl->setKey(2, false);
     }
 }
 

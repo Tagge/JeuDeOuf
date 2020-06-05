@@ -48,10 +48,8 @@ public:
     inline QString getLevelPath() const {return levelPath;};
     inline Overlay getOverlay() {return overlay;};
     inline bool getIngame() {return inGame;};
-    void calculate();
 
 private slots:
     void createGame();
-    void gameLoop();
 };
 #endif // GAMEWINDOW_H

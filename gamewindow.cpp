@@ -145,8 +145,7 @@ void GameWindow::paintEvent(QPaintEvent *e)
     else{
         ui->levelTest->show();
         QPixmap pix(":/sprites/bg_menu");
-        int y = heightOrigin-135*constants::TILE_HEIGHT/16.0;
-        painter.drawPixmap(0, y, 240*constants::TILE_WIDTH/16.0, 135*constants::TILE_HEIGHT/16.0, pix);
+        painter.drawPixmap(0, 0, 1920, 1080, pix);
     }
 }
 

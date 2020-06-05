@@ -117,7 +117,6 @@ void Level::setTimeElapsed(bool value) {
 }
 
 Level::Level(QString levelFileName, int livesLeft, LevelTimer * timer, bool check) : Level::Level(levelFileName, livesLeft) {
-    lvlTimer->terminate();
     lvlTimer->quit();
     lvlTimer = timer;
     qDebug() << check;

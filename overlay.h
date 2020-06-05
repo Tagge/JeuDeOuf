@@ -4,7 +4,6 @@
 #include<QMap>
 #include<QFontDatabase>
 #include "text.h"
-#include "leveltimer.h"
 
 class Level;
 

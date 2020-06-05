@@ -42,6 +42,7 @@ void CalculateThread::doCalculations()
         mutex.unlock();
         return;
     }
+    game->getLvl()->verifyTime();
     int size = game->getLvl()->getNbEntities();
     for(int idEntity = 0; idEntity < size; idEntity++){
         if(game->getLvl()->getEntity(idEntity)->getIsDead()){

@@ -5,7 +5,6 @@
 #include "header.h"
 #include "endgate.h"
 #include "spawngate.h"
-#include "leveltimer.h"
 #include "movingplatform.h"
 #include "brick.h"
 #include "buzzer.h"
@@ -82,9 +81,8 @@ Level::Level()
 
     levelId = 1;
 
-    lvlTimer = new LevelTimer();
-    lvlTimer->setLvl(this);
-    lvlTimer->start();
+
+    beginDate = std::chrono::steady_clock::now();
 
     keys.push_back(false);
     keys.push_back(false);
@@ -103,22 +101,34 @@ Level::~Level() {
     for(auto const& x : animationsMap) {
         delete(x);
     }
-    if(player->getLivesLeft() == 0) {
-        lvlTimer->quit();
-    }
 }
 
 void Level::setTimeElapsed(bool value) {
     timeElapsed = value;
     if(timeElapsed == true) {
-        lvlTimer->setTimeBegin(std::chrono::steady_clock::now());
+        beginDate = std::chrono::steady_clock::now();
         player->setHealth(-1);
     }
 }
 
-Level::Level(QString levelFileName, int livesLeft, LevelTimer * timer, bool check) : Level::Level(levelFileName, livesLeft) {
-    lvlTimer->quit();
-    lvlTimer = timer;
+int Level::timeleft() {
+    auto now = std::chrono::steady_clock::now();
+    auto difference  = now-beginDate;
+    int timeElapsed = difference.count()/1000000000;
+    return (duration/1000)-timeElapsed;
+}
+
+void Level::verifyTime() {
+    auto now = std::chrono::steady_clock::now();
+    auto difference  = now-beginDate;
+    int timeElapsed = difference.count()/1000000000;
+    if(timeElapsed > duration/1000) {
+        setTimeElapsed(true);
+    }
+}
+
+Level::Level(QString levelFileName, int livesLeft, std::chrono::time_point<std::chrono::steady_clock> beginDate, bool check) : Level::Level(levelFileName, livesLeft) {
+    this->beginDate = beginDate;
     qDebug() << check;
     if(check){
         player->setPosTmp(checkpoint->getXCheckpoint()+player->getHitbox().width(), player->getHitbox().top());
@@ -206,9 +216,7 @@ Level::Level(QString levelFileName)
         QJsonObject player = level["player"].toObject();
         addAnimationFromJson(player);
         createEntityFromJson("Player", player["x"].toInt(), player["y"].toInt(), QJsonObject());
-        lvlTimer = new LevelTimer();
-        lvlTimer->setLvl(this);
-        lvlTimer->start();
+        beginDate = std::chrono::steady_clock::now();
     }
     else{
         qDebug() << "File not found";

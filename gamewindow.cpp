@@ -1,7 +1,6 @@
 #include "gamewindow.h"
 #include "player.h"
 #include "ui_gamewindow.h"
-#include "leveltimer.h"
 #include <QDebug>
 #include <QMutex>
 #include <QPainter>
@@ -63,12 +62,11 @@ void GameWindow::paintEvent(QPaintEvent *e)
         QMutex mutex;
         if(lvl->getTerminate() && lvl->getPlayer()->getLivesLeft() != 0) {
             mutex.try_lock();
-            LevelTimer * timer = lvl->getTimer();
+            std::chrono::time_point<std::chrono::steady_clock> begin = lvl->getBeginDate();
             int livesLeft = lvl->getPlayer()->getLivesLeft();
             bool checkpoint = lvl->getCheckpoint()->isChecked();
             delete(lvl);
-            lvl = new Level(getLevelPath(), livesLeft, timer, checkpoint);
-            timer->setLvl(lvl);
+            lvl = new Level(getLevelPath(), livesLeft, begin, checkpoint);
             int yWindow = lvl->getYWindow();
             lvl->setYWindow(yWindow-getHeightOrigin());
             mutex.unlock();

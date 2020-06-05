@@ -27,10 +27,8 @@ MovingPlatform::MovingPlatform(int startx, int starty, int endx, int endy, int s
     setHitbox(hitbox);
     if(size == 2) {
         addAnimation(animations["platform2"]);
-        setAnimPos(0);
     } else if (size == 3) {
         addAnimation(animations["platform3"]);
-        setAnimPos(1);
     }
 }
 

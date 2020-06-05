@@ -103,7 +103,7 @@ void Player::collide(Roomba *r, Level * const l)
         QRectF roomba = r->getHitbox();
         QRectF player = getHitbox();
         if(r->getHealth()>0) {
-            if(player.bottom() < (roomba.bottom()+roomba.top())/2) {
+            if(player.bottom() < roomba.bottom()) {
                 r->setHealth(r->getHealth()-1);
                 r->setVectorX(0);
                 setJumpTime(getJumpTop() * constants::FPS_CALCULATION/4);
@@ -198,7 +198,7 @@ void Player::collide(PowerUp * pu, Level * const l)
 
 void Player::collide(MovingPlatform *mp, Level * const l)
 {
-    if((mp->getHitbox().bottom()+mp->getHitbox().top())/2 > getHitbox().bottom() && getVectorY() >= 0) {
+    if((mp->getHitbox().bottom() > getHitbox().bottom() && getVectorY() >= 0)) {
         if(mp->getSteppedOnBy().indexOf(this) == -1) {
             mp->stepOn(this);
         }

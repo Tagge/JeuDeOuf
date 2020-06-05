@@ -92,6 +92,7 @@ void Roomba::collide(LuckyBlock * lb, Level * const l)
         setPosTmp(lucky.left()-getHitbox().width(),getPosTmp().top());
         setVectorX(-getVectorX());
         setFacingBack(!getFacingBack());
+        setIntangible(constants::FPS_CALCULATION/20);
         if(getHealth() == 0) {
             lb->dropItem(l);
         }
@@ -106,6 +107,7 @@ void Roomba::collide(LuckyBlock * lb, Level * const l)
         setPosTmp(lucky.right(), getPosTmp().top());
         setVectorX(-getVectorX());
         setFacingBack(!getFacingBack());
+        setIntangible(constants::FPS_CALCULATION/20);
         if(getHealth() == 0) {
             lb->dropItem(l);
         }
@@ -123,10 +125,10 @@ void Roomba::collide(Roomba *r, Level * const l)
     if(getIntangible() == 0 && r->getIntangible() == 0 && getHealth() >= 0 && r->getHealth() >= 0) {
         if(getHealth() == r->getHealth()) {
             setVectorX(-getVectorX());
-            setIntangible(constants::FPS_CALCULATION/6);
+            setIntangible(constants::FPS_CALCULATION/10);
             setFacingBack(!getFacingBack());
             r->setVectorX(-r->getVectorX());
-            r->setIntangible(constants::FPS_CALCULATION/6);
+            r->setIntangible(constants::FPS_CALCULATION/10);
             r->setFacingBack(!r->getFacingBack());
         } else if(getHealth() > r->getHealth()) {
             if(r->getVectorX() != 0) {
@@ -134,7 +136,7 @@ void Roomba::collide(Roomba *r, Level * const l)
                 setVectorX(0);
             } else {
                 setVectorX(-getVectorX());
-                setIntangible(constants::FPS_CALCULATION/6);
+                setIntangible(constants::FPS_CALCULATION/10);
                 setFacingBack(!getFacingBack());
             }
         } else {
@@ -144,7 +146,7 @@ void Roomba::collide(Roomba *r, Level * const l)
             }
             else {
                 r->setVectorX(-r->getVectorX());
-                r->setIntangible(constants::FPS_CALCULATION/6);
+                r->setIntangible(constants::FPS_CALCULATION/10);
                 r->setFacingBack(!r->getFacingBack());
             }
         }

@@ -52,7 +52,11 @@ void Brick::collide(Roomba *r, Level * const l)
             }
             r->setFacingBack(!r->getFacingBack());
             r->setVectorX(-r->getVectorX());
-            setIntangible(10);
+            setIntangible(constants::FPS_CALCULATION/6);
+        } else if(r->getHitbox().bottom() < getHitbox().bottom()) {
+            r->setPosTmp(r->getHitbox().left(), getHitbox().top()-r->getHitbox().height());
+            r->setOnSolid(true);
+            r->validatePos();
         }
     }
 }

@@ -45,8 +45,8 @@ void Brick::collide(LivingEntity *e, Level * const l)
 void Brick::collide(Roomba *r, Level * const l)
 {
     if(getIntangible() == 0) {
-        if(r->getHitbox().bottom() == getHitbox().bottom()) {
-            if(r->getHealth() == 0) {
+        if(abs(r->getHitbox().bottom() - getHitbox().bottom()) < constants::TILE_HEIGHT/2) {
+            if(r->getHealth() == 0 && r->getVectorX() != 0) {
                 setHealth(-1);
                 jump();
             }

@@ -138,7 +138,7 @@
     }
   ],
   "player" : {
-    "x" : 130,
+    "x" : 2,
     "y" : 6,
     "type" : "Player",
     "character" : ["sprites/character/Character_0004.png"],

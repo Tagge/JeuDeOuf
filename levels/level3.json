@@ -2,9 +2,9 @@
   "start_x" : 0,
   "start_y" : 2,
   "rows" : 15,
-  "columns" : 240,
+  "columns" : 180,
   "duration": 60000,
-  "id": 1,
+  "id": 3,
   "tiles" : [
     {
       "id" : "0",

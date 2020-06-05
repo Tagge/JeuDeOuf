@@ -21,10 +21,9 @@ GameWindow::GameWindow(QWidget *parent)
     calculateThread = new CalculateThread();
     calculateThread->setGame(this);
     overlay = Overlay();
-    connect(ui->levelTest, SIGNAL(clicked()), this, SLOT(createGame()));
-    /*timer.setTimerType(Qt::PreciseTimer);
-    connect(&timer, SIGNAL(timeout()), this, SLOT(gameLoop()));
-    timer.start(16);*/
+    connect(ui->buttonLevel1, SIGNAL(clicked()), this, SLOT(createGame1()));
+    connect(ui->buttonLevel2, SIGNAL(clicked()), this, SLOT(createGame2()));
+    connect(ui->buttonLevel3, SIGNAL(clicked()), this, SLOT(createGame3()));
 }
 
 GameWindow::~GameWindow()
@@ -34,9 +33,11 @@ GameWindow::~GameWindow()
 
 void GameWindow::createGame()
 {
-    ui->levelTest->hide();
-    lvl = new Level(":/levels/level_test.json");
-    levelPath = ":/levels/level_test.json";
+    ui->buttonLevel1->hide();
+    ui->buttonLevel2->hide();
+    ui->buttonLevel3->hide();
+    lvl = new Level(":/levels/level2.json");
+    levelPath = ":/levels/level2.json";
     int yWindow = lvl->getYWindow();
     lvl->setYWindow(yWindow-heightOrigin);
     inGame = 1;
@@ -46,13 +47,52 @@ void GameWindow::createGame()
     setFocus();
 }
 
-//En cas de non Thread
-void GameWindow::gameLoop()
+void GameWindow::createGame1()
 {
-    if(inGame){
-        calculate();
-        repaint();
-    }
+    ui->buttonLevel1->hide();
+    ui->buttonLevel2->hide();
+    ui->buttonLevel3->hide();
+    lvl = new Level(":/levels/level1.json");
+    levelPath = ":/levels/level1.json";
+    int yWindow = lvl->getYWindow();
+    lvl->setYWindow(yWindow-heightOrigin);
+    inGame = 1;
+    drawThread->start();
+    QThread::msleep(5);
+    calculateThread->start();
+    setFocus();
+}
+
+void GameWindow::createGame2()
+{
+    ui->buttonLevel1->hide();
+    ui->buttonLevel2->hide();
+    ui->buttonLevel3->hide();
+    lvl = new Level(":/levels/level2.json");
+    levelPath = ":/levels/level2.json";
+    int yWindow = lvl->getYWindow();
+    lvl->setYWindow(yWindow-heightOrigin);
+    inGame = 1;
+    drawThread->start();
+    QThread::msleep(5);
+    calculateThread->start();
+    setFocus();
+}
+
+void GameWindow::createGame3()
+{
+    ui->buttonLevel1->hide();
+    ui->buttonLevel2->hide();
+    ui->buttonLevel3->hide();
+    lvl = new Level(":/levels/level3.json");
+    levelPath = ":/levels/level3.json";
+    int yWindow = lvl->getYWindow();
+    lvl->setYWindow(yWindow-heightOrigin);
+    inGame = 1;
+    drawThread->start();
+    QThread::msleep(5);
+    calculateThread->start();
+    setFocus();
 }
 
 void GameWindow::paintEvent(QPaintEvent *e)
@@ -102,7 +142,7 @@ void GameWindow::paintEvent(QPaintEvent *e)
         }
         if(lvl->getWin()) {
             if(overCount < 300) {
-                Text gg("GG", (widthOrigin/3)*ratioWidth, (heightOrigin/2)*ratioHeight, 40, "Super Mario 256", "red");
+                Text gg("GG", (widthOrigin/2)*ratioWidth, (heightOrigin/2)*ratioHeight, 40, "Super Mario 256", "red");
                 painter.drawPixmap(gg.getX(), gg.getY(), gg.getWidth()*ratioWidth, gg.getHeight()*ratioHeight, gg.getImage());
                 overCount++;
                 return;
@@ -141,10 +181,11 @@ void GameWindow::paintEvent(QPaintEvent *e)
 
     }
     else{
-        ui->levelTest->show();
+        ui->buttonLevel1->show();
+        ui->buttonLevel2->show();
+        ui->buttonLevel3->show();
         QPixmap pix(":/sprites/bg_menu");
-        int y = heightOrigin-135*constants::TILE_HEIGHT/16.0;
-        painter.drawPixmap(0, y, 240*constants::TILE_WIDTH/16.0, 135*constants::TILE_HEIGHT/16.0, pix);
+        painter.drawPixmap(0, 0, 1920, 1080, pix);
     }
 }
 
@@ -175,18 +216,6 @@ void GameWindow::keyReleaseEvent(QKeyEvent * event)
         if(event->key() == Qt::Key_Space){
             lvl->setKey(2, false);
         }
-    }
-}
-
-//En cas de non threads
-void GameWindow::calculate()
-{
-    int size = lvl->getNbEntities();
-    for(int idEntity = 0; idEntity < size; idEntity++){
-        lvl->getEntity(idEntity)->update(lvl);
-        lvl->setKey(0, false);
-        lvl->setKey(1, false);
-        lvl->setKey(2, false);
     }
 }
 

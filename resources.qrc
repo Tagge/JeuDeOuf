@@ -60,5 +60,6 @@
         <file>sprites/GroundRight.png</file>
         <file>levels/level1.json</file>
         <file>levels/level3.json</file>
+        <file>sound/8bitmusic.wav</file>
     </qresource>
 </RCC>

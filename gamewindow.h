@@ -8,6 +8,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QSound>
 #include "overlay.h"
 
 class DrawThread;
@@ -33,6 +34,7 @@ private:
     QString levelPath;
     Overlay overlay;
     int overCount = 0;
+    QSound * soundManager;
 public:
     GameWindow(QWidget *parent = nullptr);
     ~GameWindow();

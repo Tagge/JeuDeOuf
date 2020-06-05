@@ -21,6 +21,9 @@ GameWindow::GameWindow(QWidget *parent)
     calculateThread = new CalculateThread();
     calculateThread->setGame(this);
     overlay = Overlay();
+    soundManager = new QSound(":/sound/8bitmusic.wav");
+    soundManager->setLoops(QSound::Infinite);
+    soundManager->play();
     connect(ui->buttonLevel1, SIGNAL(clicked()), this, SLOT(createGame1()));
     connect(ui->buttonLevel2, SIGNAL(clicked()), this, SLOT(createGame2()));
     connect(ui->buttonLevel3, SIGNAL(clicked()), this, SLOT(createGame3()));

@@ -26,7 +26,6 @@ SOURCES += \
     entity.cpp \
     groundentity.cpp \
     level.cpp \
-    leveltimer.cpp \
     livingentity.cpp \
     luckyblock.cpp \
     main.cpp \
@@ -54,7 +53,6 @@ HEADERS += \
     groundentity.h \
     header.h \
     level.h \
-    leveltimer.h \
     livingentity.h \
     luckyblock.h \
     movingplatform.h \

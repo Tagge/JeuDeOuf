@@ -1,7 +1,6 @@
 #include "drawthread.h"
 #include "header.h"
 #include "player.h"
-#include "leveltimer.h"
 #include <QDebug>
 #include <QMutex>
 

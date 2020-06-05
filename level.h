@@ -18,7 +18,7 @@ public:
     ~Level();
     Level(QString levelFileName);
     Level(QString levelFileName, int livesLeft);
-    Level(QString levelFileName, int livesLeft, LevelTimer * timer, bool check = false);
+    Level(QString levelFileName, int livesLeft, std::chrono::time_point<std::chrono::steady_clock> beginDate, bool check = false);
     void addAnimationFromJson(const QJsonObject & object);
     void addAnimation(const QJsonArray & images, QString name);
     void createEntityFromJson(QString name, int x, int y, const QJsonObject & param);
@@ -41,14 +41,16 @@ public:
     inline void addLivingEntity(LivingEntity * le) {livingEntities.push_back(le);};
     inline bool getTimeElapsed() {return timeElapsed;};
     void setTimeElapsed(bool value);
+    void verifyTime();
     inline int getDuration() { return duration;};
     inline void setDuration(int value) {duration = value;};
     inline bool getTerminate() {return terminate;};
     inline void setTerminate(bool value) {terminate = value;};
-    inline LevelTimer * getTimer() {return lvlTimer;};
     inline void setLevelId(int value) {levelId = value;};
     inline int getLevelId() {return levelId;};
     inline Checkpoint * getCheckpoint() const {return checkpoint;};
+    inline std::chrono::time_point<std::chrono::steady_clock> getBeginDate() {return beginDate;};
+    int timeleft();
 
 private:
     QMap<QString, Animation*> animationsMap;
@@ -63,10 +65,10 @@ private:
     bool timeElapsed = false;
     int duration;
     bool win = false;
-    LevelTimer * lvlTimer;
     bool terminate = false;
     int levelId;
     Checkpoint * checkpoint;
+    std::chrono::time_point<std::chrono::steady_clock> beginDate;
 };
 
 #endif // LEVEL_H

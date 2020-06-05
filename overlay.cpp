@@ -15,7 +15,7 @@ Overlay::Overlay()
 void Overlay::update(Level * lvl) {
     int livesLeft = lvl->getPlayer()->getLivesLeft();
     int levelId = lvl->getLevelId();
-    int timeLeft = lvl->getTimer()->getTimeLeft();
+    int timeLeft = lvl->timeleft();
     QString livesLeftSentence = "Vies : ";
     for(int i = 0; i<livesLeft; i++) {
         livesLeftSentence.append("♥");

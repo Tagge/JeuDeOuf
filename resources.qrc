@@ -54,5 +54,11 @@
         <file>sprites/enemies/Buzzer_2.png</file>
         <file>sprites/enemies/Buzzer_3.png</file>
         <file>sprites/enemies/DeathBuzzer.png</file>
+        <file>levels/level2.json</file>
+        <file>sprites/GroundInner.png</file>
+        <file>sprites/GroundLeft.png</file>
+        <file>sprites/GroundRight.png</file>
+        <file>levels/level1.json</file>
+        <file>levels/level3.json</file>
     </qresource>
 </RCC>

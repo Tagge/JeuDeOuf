@@ -51,5 +51,8 @@ public:
 
 private slots:
     void createGame();
+    void createGame1();
+    void createGame2();
+    void createGame3();
 };
 #endif // GAMEWINDOW_H

@@ -142,7 +142,7 @@ void GameWindow::paintEvent(QPaintEvent *e)
         }
         if(lvl->getWin()) {
             if(overCount < 300) {
-                Text gg("GG", (widthOrigin/3)*ratioWidth, (heightOrigin/2)*ratioHeight, 40, "Super Mario 256", "red");
+                Text gg("GG", (widthOrigin/2)*ratioWidth, (heightOrigin/2)*ratioHeight, 40, "Super Mario 256", "red");
                 painter.drawPixmap(gg.getX(), gg.getY(), gg.getWidth()*ratioWidth, gg.getHeight()*ratioHeight, gg.getImage());
                 overCount++;
                 return;

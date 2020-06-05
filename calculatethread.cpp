@@ -27,8 +27,12 @@ void CalculateThread::doCalculations()
 {
     QMutex mutex;
     if(game->getLvl()->getWin()) {
-        return;
+      return;
     }
+    if(!game->getIngame()) {
+      return;
+    }
+
     if(game->getLvl()->getTerminate()) {
         return;
     }

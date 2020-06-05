@@ -23,5 +23,7 @@ void DrawThread::run()
 void DrawThread::doDraw()
 {
     QMutex mutex;
+    mutex.lock();
     game->repaint();
+    mutex.unlock();
 }
